@@ -105,3 +105,18 @@ a {
     color-scheme: dark;
   }
 }
+
+
+.dashboard {
+  display: flex;
+  flex-direction: column;
+  border: solid 10px white;
+  align-items: center;
+  margin-top: 20%;
+}
+
+.dashboard button {
+  background-color: white;
+  color: black;
+  size: 50px;
+}
