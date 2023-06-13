@@ -60,7 +60,11 @@ const searchTracks = async (e) => {
     console.log(data)
     setTracks(data.tracks.items)
 }
+function handleClick(event){
 
+    let idTrack = event.target.id
+    console.log(idTrack)
+}
 
 const renderArtists = () => {
     return artists.map(artist => (
@@ -72,10 +76,16 @@ const renderArtists = () => {
 }
 
 const renderTracks = () => {
+    
     return tracks.map((track) => (
-        <div key={track.id}>
+        <div
+             onClick={handleClick}
+             key={track.id}
+             id={track.id}        
+        >
             {track.name}
         </div>
+        
     ))
 }
 
