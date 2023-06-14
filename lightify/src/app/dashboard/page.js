@@ -1,6 +1,8 @@
 "use client"
 import { useState, useEffect } from "react";
 import axios from "axios"
+import ReactModal from "react-modal";
+import Modal from "./modal";
 
 
 
@@ -9,6 +11,7 @@ const [token, setToken] = useState("")
 const [searchKey, setSearchKey] = useState("")
 const [artists, setArtists] = useState([])
 const [tracks, setTracks] = useState([])
+const [isOpen, setIsOpen] = useState([])
   
   useEffect(() => {
     const hash = window.location.hash
@@ -60,11 +63,7 @@ const searchTracks = async (e) => {
     console.log(data)
     setTracks(data.tracks.items)
 }
-function handleClick(event){
 
-    let idTrack = event.target.id
-    console.log(idTrack)
-}
 
 const renderArtists = () => {
     return artists.map(artist => (
@@ -78,13 +77,17 @@ const renderArtists = () => {
 const renderTracks = () => {
     
     return tracks.map((track) => (
-        <div
-             onClick={handleClick}
+        <>
+             <div
+             onClick={() => setIsOpen(true)}
              key={track.id}
              id={track.id}        
-        >
+            >
             {track.name}
-        </div>
+            </div>
+        </>
+       
+        
         
     ))
 }
@@ -102,6 +105,11 @@ const renderTracks = () => {
                 {token && <input type='text' onChange={e => setSearchKey(e.target.value)}/>}
                 {token &&<button type={"submit"}>search</button>}
             </form>
+            {isOpen && <Modal setIsOpen={setIsOpen} />}
+
+
+            
+
             {renderArtists()}
             {renderTracks()}
         </div>
