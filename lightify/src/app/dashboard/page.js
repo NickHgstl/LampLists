@@ -6,14 +6,17 @@ import Modal from "./modal";
 
 
 
-export default function navbar(){
-const [token, setToken] = useState("")
+export default function Navbar({data}){
+let token = data
+
+//const [token, setToken] = useState("")
 const [searchKey, setSearchKey] = useState("")
 const [artists, setArtists] = useState([])
 const [tracks, setTracks] = useState([])
-const [isOpen, setIsOpen] = useState([])
+const [isOpen, setIsOpen] = useState(false)
+const [playlists, setPlaylists] = useState([])
   
-  useEffect(() => {
+/*  useEffect(() => {
     const hash = window.location.hash
     let token = window.localStorage.getItem("token")
 
@@ -24,15 +27,14 @@ const [isOpen, setIsOpen] = useState([])
         window.localStorage.setItem("token", token)
     } 
     setToken(token)
-}, [])
+}, [])*/
 
  
-  const logout = () => {
-    setToken("")
-    window.localStorage.removeItem("token")
-  }
+ 
 
   const searchArtists = async (e) => {
+
+    setTracks([])
     e.preventDefault()
     const {data} = await axios.get("https://api.spotify.com/v1/search", {
         headers: {
@@ -49,6 +51,8 @@ const [isOpen, setIsOpen] = useState([])
 }
 
 const searchTracks = async (e) => {
+
+    setArtists([])
     e.preventDefault()
     const {data} = await axios.get("https://api.spotify.com/v1/search", {
         headers: {
@@ -65,6 +69,24 @@ const searchTracks = async (e) => {
 }
 
 
+const getPlaylists = async (e) => {
+    
+    e.preventDefault()
+    setPlaylists([])
+    const {data} = await axios.get("https://api.spotify.com/v1/me/playlists", {
+        headers: {
+            Authorization: `Bearer ${token}`
+        },
+        params: {
+            limit: 20,
+            
+        }
+    })
+    console.log(data.items)
+    setPlaylists(data.items)
+
+}
+
 const renderArtists = () => {
     return artists.map(artist => (
         <div key={artist.id}>
@@ -76,6 +98,7 @@ const renderArtists = () => {
 
 const renderTracks = () => {
     
+    
     return tracks.map((track) => (
         <>
              <div
@@ -85,18 +108,25 @@ const renderTracks = () => {
             >
             {track.name}
             </div>
-        </>
-       
-        
-        
+        </>       
     ))
 }
 
 
+const renderPlaylists = () => {
+    console.log(playlists)
+    
+    return playlists.map(playlist => (
+        <div key ={playlist.id}>
+            {playlist.name}
+        </div>
+    ))
+    }
   return (
     <div>
-        <button onClick={logout}>click me</button>
         <div className="dashboard">
+        <button onClick={getPlaylists}>gggg</button>
+            
         <form onSubmit={searchArtists} className="search">
                 {token && <input type='text' onChange={e => setSearchKey(e.target.value)}/>}
                 {token && <button type={"submit"}>search</button>}
@@ -105,11 +135,10 @@ const renderTracks = () => {
                 {token && <input type='text' onChange={e => setSearchKey(e.target.value)}/>}
                 {token &&<button type={"submit"}>search</button>}
             </form>
-            {isOpen && <Modal setIsOpen={setIsOpen} />}
-
+            {isOpen && <Modal token={token} setIsOpen={setIsOpen} onButtonClick={getPlaylists} renderPlaylists={renderPlaylists}/>}
 
             
-
+           
             {renderArtists()}
             {renderTracks()}
         </div>

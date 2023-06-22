@@ -122,7 +122,7 @@ a {
 }
 
 .darkBG {
-  background-color: rgba(0, 0, 0, 0.2);
+  background-color: rgba(184, 0, 175, 0.521);
   width: 100vw;
   height: 100vh;
   z-index: 0;
@@ -140,8 +140,8 @@ a {
 }
 
 .modal {
-  width: 250px;
-  height: 170px;
+  width: 700px;
+  height: 470px;
   background: white;
   color: white;
   z-index: 10;
