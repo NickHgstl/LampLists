@@ -15,6 +15,7 @@ const [artists, setArtists] = useState([])
 const [tracks, setTracks] = useState([])
 const [isOpen, setIsOpen] = useState(false)
 const [playlists, setPlaylists] = useState([])
+const [songUri, setSongUri] = useState("")
   
 /*  useEffect(() => {
     const hash = window.location.hash
@@ -64,14 +65,13 @@ const searchTracks = async (e) => {
             limit: 5,
         }
     })
-    console.log(data)
     setTracks(data.tracks.items)
+    
 }
 
 
-const getPlaylists = async (e) => {
+const getPlaylists = async () => {
     
-    e.preventDefault()
     setPlaylists([])
     const {data} = await axios.get("https://api.spotify.com/v1/me/playlists", {
         headers: {
@@ -82,8 +82,12 @@ const getPlaylists = async (e) => {
             
         }
     })
-    console.log(data.items)
     setPlaylists(data.items)
+}
+
+const addToPlaylist = async (e) => {
+
+    e.preventDefault()
 
 }
 
@@ -102,9 +106,9 @@ const renderTracks = () => {
     return tracks.map((track) => (
         <>
              <div
-             onClick={() => setIsOpen(true)}
+             onClick={openModal}
              key={track.id}
-             id={track.id}        
+             id={track.uri}        
             >
             {track.name}
             </div>
@@ -113,15 +117,33 @@ const renderTracks = () => {
 }
 
 
-const renderPlaylists = () => {
-    console.log(playlists)
-    
-    return playlists.map(playlist => (
-        <div key ={playlist.id}>
+
+const renderPlaylists = () => {    
+    return playlists.map((playlist) => (
+        <>
+            <div
+            key ={playlist.id}
+            onClick={postPlaylist}
+            >
             {playlist.name}
-        </div>
+            </div>
+        </>
+        
     ))
-    }
+}
+
+function openModal(e) {
+    setIsOpen(true)
+    getPlaylists()
+    let songUri = e.target.id
+    console.log(songUri)
+}
+
+const postPlaylist = function(){
+    console.log("test")
+}
+
+
   return (
     <div>
         <div className="dashboard">

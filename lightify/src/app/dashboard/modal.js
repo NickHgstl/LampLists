@@ -1,9 +1,7 @@
 import { RiCloseLine } from "react-icons/ri";
-import Data from "./data";
 
 
-export default function Modal({setIsOpen, token, onButtonClick, renderPlaylists}) {
-    console.log(token)
+export default function Modal({setIsOpen,  onButtonClick, renderPlaylists}) {
 
 
  
@@ -37,6 +35,7 @@ export default function Modal({setIsOpen, token, onButtonClick, renderPlaylists}
                     </div>
                 </div>
             </div>
+            
         </>
     )
 }

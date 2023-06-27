@@ -1,10 +1,7 @@
 "use client"
 
-import Image from 'next/image'
-import styles from './page.module.css'
 import { useRouter } from 'next/navigation';
 import { useState, useEffect } from 'react';
-import Modal from './dashboard/modal';
 import Navbar from './dashboard/page';
 
 export default function Home() {
@@ -32,6 +29,7 @@ export default function Home() {
   
   
 const logout = () => {
+  location.reload()
   setToken("")
   window.localStorage.removeItem("token")
 }
