@@ -1,9 +1,11 @@
 import { RiCloseLine } from "react-icons/ri";
 
 
-export default function Modal({setIsOpen,  onButtonClick, renderPlaylists}) {
+export default function Modal({setIsOpen,  onButtonClick, renderPlaylists, token}) {
 
 
+    token = token
+    
  
 
     return (

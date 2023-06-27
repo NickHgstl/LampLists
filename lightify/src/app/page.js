@@ -11,8 +11,7 @@ export default function Home() {
   const RESPONSE_TYPE = "token"
 
   const [token, setToken] = useState("")
-  const router = useRouter();
-
+  
   useEffect(() => {
     const hash = window.location.hash
     let token = window.localStorage.getItem("token")
@@ -22,7 +21,6 @@ export default function Home() {
 
         window.location.hash = ""
         window.localStorage.setItem("token", token)
-        console.log(window.localStorage.setItem("token", token))
     } 
     setToken(token)
 }, [])
@@ -38,7 +36,7 @@ const logout = () => {
 
     if (!token) {
         
-        window.open(`${AUTH_ENDPOINT}?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&response_type=${RESPONSE_TYPE}`)
+        window.open(`${AUTH_ENDPOINT}?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&response_type=${RESPONSE_TYPE}&scope=%20playlist-modify-private%20playlist-modify-public`)
         
     }
     

@@ -7,31 +7,16 @@ import Modal from "./modal";
 
 
 export default function Navbar({data}){
-let token = data
-
-//const [token, setToken] = useState("")
+    
 const [searchKey, setSearchKey] = useState("")
 const [artists, setArtists] = useState([])
 const [tracks, setTracks] = useState([])
 const [isOpen, setIsOpen] = useState(false)
 const [playlists, setPlaylists] = useState([])
 const [songUri, setSongUri] = useState("")
-  
-/*  useEffect(() => {
-    const hash = window.location.hash
-    let token = window.localStorage.getItem("token")
+let token = data
 
-    if(!token && hash) {
-        let token = hash.substring(1).split("&").find(elem => elem.startsWith("access_token"))?.split("=")[1]
-
-        window.location.hash = ""
-        window.localStorage.setItem("token", token)
-    } 
-    setToken(token)
-}, [])*/
-
- 
- 
+   
 
   const searchArtists = async (e) => {
 
@@ -85,11 +70,7 @@ const getPlaylists = async () => {
     setPlaylists(data.items)
 }
 
-const addToPlaylist = async (e) => {
 
-    e.preventDefault()
-
-}
 
 const renderArtists = () => {
     return artists.map(artist => (
@@ -108,7 +89,7 @@ const renderTracks = () => {
              <div
              onClick={openModal}
              key={track.id}
-             id={track.uri}        
+             id={track.id}        
             >
             {track.name}
             </div>
@@ -124,6 +105,7 @@ const renderPlaylists = () => {
             <div
             key ={playlist.id}
             onClick={postPlaylist}
+            id={playlist.id}
             >
             {playlist.name}
             </div>
@@ -132,16 +114,32 @@ const renderPlaylists = () => {
     ))
 }
 
+const postPlaylist = async (e) => {
+    const playlist = (e.target.id)
+    console.log(playlist)
+    console.log(songUri)
+    const url = `https://api.spotify.com/v1/playlists/${playlist}/tracks`
+
+    axios({
+        method: 'post',
+        url: url,
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+            data: {
+                uris: [`spotify:track:${songUri}`]
+            }
+    })
+}
+
+
 function openModal(e) {
     setIsOpen(true)
     getPlaylists()
-    let songUri = e.target.id
-    console.log(songUri)
+    setSongUri(e.target.id)
 }
 
-const postPlaylist = function(){
-    console.log("test")
-}
+
 
 
   return (
