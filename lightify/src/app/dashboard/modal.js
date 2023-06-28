@@ -12,17 +12,17 @@ export default function Modal({setIsModal1Open,  onButtonClick, renderPlaylists,
         <>
             <div className="darkBG" onClick={() => setIsModal1Open(false)} />
             <div className="centered">
-                <div className="modal">
-                    <div className="modalHeader">
+                <div className="modal1">
+                    <div className="modal1Header">
                         <h5 className="heading">Add to playlist</h5>
                     </div>
                     <button className="closeBtn" onClick={() => setIsModal1Open(false)}>
                         <RiCloseLine style={{marginBottom: "-3px"}} />
                     </button>
-                    <div className="modalContent">
+                    <div className="modal1Content">
                         {renderPlaylists()}
                     </div>
-                    <div className="modalActions">
+                    <div className="modal1Actions">
                         <div className="actionsContainer">
                             <button className="deleteBtn" onClick={onButtonClick}>
                                 Delete

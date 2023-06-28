@@ -6,23 +6,20 @@ import Modal from "./modal";
 import Sparkmodal from "./spark_modal";
 
 
-
 export default function Navbar({data}){
     
 const [searchKey, setSearchKey] = useState("")
 const [artists, setArtists] = useState([])
 const [tracks, setTracks] = useState([])
-const [isModal2Open, setIsModal1Open] = useState(false)
+const [isModal1Open, setIsModal1Open] = useState(false)
 const [isModal2open, setIsModal2Open] = useState(false)
 const [playlists, setPlaylists] = useState([])
 const [songId, setSongId] = useState("")
-const [spark1, setSpark1] = useState("")
+const [spark1, setSpark1] = useState([])
 const [spark2, setSpark2] = useState("")
 const [spark3, setSpark3] = useState("")
 
-let token = data
-
-   
+let token = data  
 
   const searchArtists = async (e) => {
 
@@ -60,7 +57,6 @@ const searchTracks = async (e) => {
     
 }
 
-
 const getPlaylists = async () => {
     
     setPlaylists([])
@@ -76,8 +72,6 @@ const getPlaylists = async () => {
     setPlaylists(data.items)
 }
 
-
-
 const renderArtists = () => {
     return artists.map(artist => (
         <div key={artist.id}>
@@ -89,21 +83,18 @@ const renderArtists = () => {
 
 const renderTracks = () => {
     
-    
     return tracks.map((track) => (
         <>
              <div
              onClick={openModal}
              key={track.id}
-             id={track.id}        
+             id={track.uri}        
             >
             {track.name}
             </div>
         </>       
     ))
 }
-
-
 
 const renderPlaylists = () => {    
     return playlists.map((playlist) => (
@@ -115,29 +106,35 @@ const renderPlaylists = () => {
             >
             {playlist.name}
             </div>
-        </>
-        
+        </>        
     ))
 }
 
-const postPlaylist = async (e) => {
+async function postPlaylist(e) {
+
     const playlist = (e.target.id)
-    console.log(playlist)
-    console.log(songId)
-    const url = `https://api.spotify.com/v1/playlists/${playlist}/tracks`
+    const url = `https://api.spotify.com/v1/playlists/${playlist}/tracks`;
 
-    axios({
-        method: 'post',
-        url: url,
-            headers: {
-                Authorization: `Bearer ${token}`,
-            },
-            data: {
-                uris: [`spotify:track:${songId}`]
-            }
-    })
-}
-
+    try {
+      const response = await fetch(url, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ uris: spark1 })
+      });
+  
+      if (response.ok) {
+        const data = await response.json();
+        console.log('Items added to the playlist:', data);
+      } else {
+        console.error('Error adding items to the playlist:', response.status);
+      }
+    } catch (error) {
+      console.error('Error adding items to the playlist:', error);
+    }
+  }
 
 function openModal(e) {
     setIsModal2Open(true)
@@ -145,12 +142,15 @@ function openModal(e) {
     setSongId(e.target.id)
 }
 
+function closeModal2(e){
+    setIsModal2Open(false)
+    console.log(spark1)
+}
+
 function addSpark(e){
     if (e.target.innerHTML == "Spark 1"){
-        setSpark1((prevSpark1) => prevSpark1 + songId)
-    }
-    else {
-        console.log("error")
+        setSpark1(spark1.concat(songId))
+        console.log(spark1)
     }
 }
 
@@ -159,23 +159,12 @@ function clearSparks() {
     setSpark2("")
     setSpark3("")
 }
-
-function test (){
-    console.log(spark1)
-}
-console.log(spark1)
-
-
   return (
     <div>
         <div className="dashboard">
         <button className="sparkButton" onClick={() => setIsModal1Open(true)}>Add Spark 1 to playlist</button>
         <button className="sparkButton" onClick={() => setIsModal1Open(true)}>Add spark 2 to playlist</button>
         <button className="sparkButton" onClick={() => setIsModal1Open(true)}>Add spark 3 to playlist</button>
-        <button onClick={test}>TEST</button>
-
-
-
             
         <form onSubmit={searchArtists} className="search">
                 {token && <input type='text' onChange={e => setSearchKey(e.target.value)}/>}
@@ -185,13 +174,9 @@ console.log(spark1)
                 {token && <input type='text' onChange={e => setSearchKey(e.target.value)}/>}
                 {token &&<button type={"submit"}>search</button>}
             </form>
-            {isModal2Open && <Modal token={token} setIsModal1Open={setIsModal1Open} onButtonClick={getPlaylists} renderPlaylists={renderPlaylists} addSpark={addSpark} clearSparks={clearSparks}/>}
-            {isModal2open && <Sparkmodal token={token} setIsModal2Open={setIsModal2Open} onButtonClick={getPlaylists} renderPlaylists={renderPlaylists} addSpark={addSpark} clearSparks={clearSparks}/>}
-
-
-
-            
-           
+            {isModal1Open && <Modal token={token} setIsModal1Open={setIsModal1Open} onButtonClick={getPlaylists} renderPlaylists={renderPlaylists} addSpark={addSpark} clearSparks={clearSparks}/>}
+            {isModal2open && <Sparkmodal token={token} setIsModal2Open={setIsModal2Open} onButtonClick={getPlaylists} renderPlaylists={renderPlaylists} addSpark={addSpark} clearSparks={clearSparks} closeModal2={closeModal2}/>}
+                       
             {renderArtists()}
             {renderTracks()}
         </div>
