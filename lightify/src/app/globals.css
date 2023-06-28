@@ -140,8 +140,8 @@ a {
 }
 
 .modal {
-  width: 700px;
-  height: 470px;
+  width: 400px;
+  height: 200px;
   background: white;
   color: white;
   z-index: 10;
@@ -167,10 +167,17 @@ a {
 }
 
 .modalContent {
+  display: flex;
+  flex-direction: column;
   padding: 10px;
   font-size: 14px;
   color: #2c3e50;
-  text-align: center;
+  align-items: center;
+  
+}
+
+.modalItem {
+  
 }
 
 .modalActions {
