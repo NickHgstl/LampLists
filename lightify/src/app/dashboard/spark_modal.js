@@ -20,9 +20,9 @@ export default function Sparkmodal({setIsModal2Open,  onButtonClick, renderPlayl
                         <RiCloseLine style={{marginBottom: "-3px"}} />
                     </button>
                     <div className="modal2Content">
-                        <div className="modalItem" onClick={addSpark}>Spark 1</div>
-                        <div className="modalItem">Spark 2</div>
-                        <div className="modalItem">Spark 3</div>
+                        <div className="modalItem" onClick={addSpark} id="spark 1">Spark 1</div>
+                        <div className="modalItem" onClick={addSpark} id="spark 2">Spark 2</div>
+                        <div className="modalItem" onClick={addSpark} id="spark 3">Spark 3</div>
                     </div>
                     <div className="modal2Actions">
                         <div className="actionsContainer">

@@ -16,8 +16,9 @@ const [isModal2open, setIsModal2Open] = useState(false)
 const [playlists, setPlaylists] = useState([])
 const [songId, setSongId] = useState("")
 const [spark1, setSpark1] = useState([])
-const [spark2, setSpark2] = useState("")
-const [spark3, setSpark3] = useState("")
+const [spark2, setSpark2] = useState([])
+const [spark3, setSpark3] = useState([])
+const [tempSpark, setTempSpark] = useState([])
 
 let token = data  
 
@@ -110,8 +111,11 @@ const renderPlaylists = () => {
     ))
 }
 
-async function postPlaylist(e) {
 
+
+
+async function postPlaylist(e) {
+    console.log(tempSpark)
     const playlist = (e.target.id)
     const url = `https://api.spotify.com/v1/playlists/${playlist}/tracks`;
 
@@ -122,7 +126,7 @@ async function postPlaylist(e) {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ uris: spark1 })
+        body: JSON.stringify({ uris: tempSpark })
       });
   
       if (response.ok) {
@@ -136,6 +140,8 @@ async function postPlaylist(e) {
     }
   }
 
+
+
 function openModal(e) {
     setIsModal2Open(true)
     getPlaylists()
@@ -147,10 +153,60 @@ function closeModal2(e){
     console.log(spark1)
 }
 
+function addSpark1toPlaylist(){
+    setTempSpark(spark1)
+    setIsModal1Open(true)
+    console.log(tempSpark)
+}
+
+function addSpark2toPlaylist(){
+    setTempSpark(spark2)
+    setIsModal1Open(true)
+    console.log(tempSpark)
+}
+
+function addSpark3toPlaylist(){
+    setTempSpark(spark3)
+    setIsModal1Open(true)
+    console.log(tempSpark)
+}
+
+
+/*function addSparktoPlaylist(){
+    setIsModal1Open(true)
+
+    if(e.target.id == "spark 1") {
+        setTempSpark(spark1)
+    }
+
+    else if(e.target.id == "spark 2") {
+        console.log("spark2")
+        setTempSpark(spark2)
+    }
+
+    else if(e.target.id == "spark 3") {
+        setTempSpark(spark3)
+    }
+console.log(tempSpark)
+}*/
+
 function addSpark(e){
-    if (e.target.innerHTML == "Spark 1"){
+    if (e.target.id === "spark 1"){
+        console.log("added to spark 1")
         setSpark1(spark1.concat(songId))
         console.log(spark1)
+    }
+
+    else if (e.target.id === "spark 2"){
+        console.log("added to spark 2")
+        setSpark2(spark2.concat(songId))
+        console.log(spark2)
+    }
+
+    else if (e.target.id === "spark 3"){
+        console.log("added to spark 3")
+        setSpark3(spark3.concat(songId))
+        console.log(spark3)
     }
 }
 
@@ -162,9 +218,9 @@ function clearSparks() {
   return (
     <div>
         <div className="dashboard">
-        <button className="sparkButton" onClick={() => setIsModal1Open(true)}>Add Spark 1 to playlist</button>
-        <button className="sparkButton" onClick={() => setIsModal1Open(true)}>Add spark 2 to playlist</button>
-        <button className="sparkButton" onClick={() => setIsModal1Open(true)}>Add spark 3 to playlist</button>
+        <button className="sparkButton" id="spark1" onClick={addSpark1toPlaylist}>Add Spark 1 to playlist</button>
+        <button className="sparkButton" id="spark2" onClick={addSpark2toPlaylist}>Add spark 2 to playlist</button>
+        <button className="sparkButton" id="spark3" onClick={addSpark3toPlaylist}>Add spark 3 to playlist</button>
             
         <form onSubmit={searchArtists} className="search">
                 {token && <input type='text' onChange={e => setSearchKey(e.target.value)}/>}
