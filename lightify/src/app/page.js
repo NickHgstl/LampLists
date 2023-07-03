@@ -6,7 +6,7 @@ import Navbar from './dashboard/page';
 
 export default function Home() {
   const CLIENT_ID = "e0b423264c9746428e28129fc08fead9"
-  const REDIRECT_URI = "http://localhost:3000/"
+  const REDIRECT_URI = "http://localhost:3000/dashboard"
   const AUTH_ENDPOINT = "https://accounts.spotify.com/authorize"
   const RESPONSE_TYPE = "token"
 
@@ -26,18 +26,13 @@ export default function Home() {
 }, [])
   
   
-const logout = () => {
-  location.reload()
-  setToken("")
-  window.localStorage.removeItem("token")
-}
+
 
   function checkLogin() {
 
     if (!token) {
         
-        window.open(`${AUTH_ENDPOINT}?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&response_type=${RESPONSE_TYPE}&scope=%20playlist-modify-private%20playlist-modify-public`)
-        
+        window.open(`${AUTH_ENDPOINT}?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&response_type=${RESPONSE_TYPE}&scope=%20playlist-modify-private%20playlist-modify-public`)        
     }
     
   }
@@ -47,10 +42,17 @@ const logout = () => {
       <header>
         <h1>Lightify</h1>
         <a onClick={checkLogin}>Login to spotify</a>
-        <button onClick={logout}>click me</button>
+
+        <form onSubmit={console.log("")}>
+          <label for="email">email</label>
+          <input name='email' className='emailInput' placeholder='email'></input>
+          <label for="password">password</label>
+          <input name='password' className='passwordInput' placeholder='password'></input>
+          <button type={"submit"}>SUBMIT</button>        
+        </form>
 
       </header>
-      <Navbar data={token} />
+      
     </div>
     )
 }

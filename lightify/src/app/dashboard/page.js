@@ -6,7 +6,7 @@ import Modal from "./modal";
 import Sparkmodal from "./spark_modal";
 
 
-export default function Navbar({data}){
+export default function Navbar(){
     
 const [searchKey, setSearchKey] = useState("")
 const [artists, setArtists] = useState([])
@@ -34,13 +34,24 @@ const [showCustomSpark5, setShowCustomSpark5] = useState("Spark 8")
 const [showCustomSpark6, setShowCustomSpark6] = useState("Spark 9")
 const [showCustomSpark7, setShowCustomSpark7] = useState("Spark 10")
 
+const urlSearchParams = new URLSearchParams(window.location.hash.slice(1));
+    const token = urlSearchParams.get("access_token");
+    
+    if (token) {
+      console.log("Access Token:", token);
+    } else {
+      console.log("Access Token not found in the URL.");
+    }
 
 
 
+const logout = () => {
+    window.open("http://localhost:3000/")
+    setToken("")
+    window.localStorage.removeItem("token")
+  }
 
-let token = data  
-
-  const searchArtists = async (e) => {
+const searchArtists = async (e) => {
 
     setTracks([])
     e.preventDefault()
@@ -59,7 +70,7 @@ let token = data
 }
 
 const searchTracks = async (e) => {
-
+    console.log(token)
     setArtists([])
     e.preventDefault()
     const {data} = await axios.get("https://api.spotify.com/v1/search", {
@@ -335,8 +346,10 @@ function clearSparks() {
     setSpark9([])
     setSpark10([])
 }
+
   return (
     <div>
+        <button onClick={logout}>LOG OUT</button>
         <div className="dashboard">
         <button className="sparkButton" id="spark1" onClick={addSpark1toPlaylist}>Add Spark 1 to playlist</button>
         <button className="sparkButton" id="spark2" onClick={addSpark2toPlaylist}>Add spark 2 to playlist</button>
@@ -352,12 +365,12 @@ function clearSparks() {
 
             
         <form onSubmit={searchArtists} className="search">
-                {token && <input type='text' onChange={e => setSearchKey(e.target.value)}/>}
-                {token && <button type={"submit"}>search</button>}
+                <input type='text' onChange={e => setSearchKey(e.target.value)}/>
+                <button type={"submit"}>search</button>
             </form>
             <form onSubmit={searchTracks}>
-                {token && <input type='text' onChange={e => setSearchKey(e.target.value)}/>}
-                {token &&<button type={"submit"}>search</button>}
+                <input type='text' onChange={e => setSearchKey(e.target.value)}/>
+                <button type={"submit"}>search</button>
             </form>
             {isModal1Open && <Modal 
                 token={token}
