@@ -18,7 +18,25 @@ const [songId, setSongId] = useState("")
 const [spark1, setSpark1] = useState([])
 const [spark2, setSpark2] = useState([])
 const [spark3, setSpark3] = useState([])
+const [spark4, setSpark4] = useState([])
+const [spark5, setSpark5] = useState([])
+const [spark6, setSpark6] = useState([])
+const [spark7, setSpark7] = useState([])
+const [spark8, setSpark8] = useState([])
+const [spark9, setSpark9] = useState([])
+const [spark10, setSpark10] = useState([])
 const [tempSpark, setTempSpark] = useState([])
+const [showCustomSpark1, setShowCustomSpark1] = useState("Spark 4")
+const [showCustomSpark2, setShowCustomSpark2] = useState("Spark 5")
+const [showCustomSpark3, setShowCustomSpark3] = useState("Spark 6")
+const [showCustomSpark4, setShowCustomSpark4] = useState("Spark 7")
+const [showCustomSpark5, setShowCustomSpark5] = useState("Spark 8")
+const [showCustomSpark6, setShowCustomSpark6] = useState("Spark 9")
+const [showCustomSpark7, setShowCustomSpark7] = useState("Spark 10")
+
+
+
+
 
 let token = data  
 
@@ -171,24 +189,47 @@ function addSpark3toPlaylist(){
     console.log(tempSpark)
 }
 
-
-/*function addSparktoPlaylist(){
+function addSpark4toPlaylist(){
+    setTempSpark(spark4)
     setIsModal1Open(true)
+    console.log(tempSpark)
+}
 
-    if(e.target.id == "spark 1") {
-        setTempSpark(spark1)
-    }
+function addSpark5toPlaylist(){
+    setTempSpark(spark5)
+    setIsModal1Open(true)
+    console.log(tempSpark)
+}
 
-    else if(e.target.id == "spark 2") {
-        console.log("spark2")
-        setTempSpark(spark2)
-    }
+function addSpark6toPlaylist(){
+    setTempSpark(spark6)
+    setIsModal1Open(true)
+    console.log(tempSpark)
+}
 
-    else if(e.target.id == "spark 3") {
-        setTempSpark(spark3)
-    }
-console.log(tempSpark)
-}*/
+function addSpark7toPlaylist(){
+    setTempSpark(spark7)
+    setIsModal1Open(true)
+    console.log(tempSpark)
+}
+
+function addSpark8toPlaylist(){
+    setTempSpark(spark8)
+    setIsModal1Open(true)
+    console.log(tempSpark)
+}
+
+function addSpark9toPlaylist(){
+    setTempSpark(spark9)
+    setIsModal1Open(true)
+    console.log(tempSpark)
+}
+
+function addSpark10toPlaylist(){
+    setTempSpark(spark10)
+    setIsModal1Open(true)
+    console.log(tempSpark)
+}
 
 function addSpark(e){
     if (e.target.id === "spark 1"){
@@ -208,12 +249,91 @@ function addSpark(e){
         setSpark3(spark3.concat(songId))
         console.log(spark3)
     }
+
+    else if (e.target.id === "spark 4"){
+        console.log("added to spark 4")
+        setSpark4(spark4.concat(songId))
+        console.log(spark4)
+    }
+
+    else if (e.target.id === "spark 5"){
+        console.log("added to spark 5")
+        setSpark5(spark5.concat(songId))
+        console.log(spark5)
+    }
+
+    else if (e.target.id === "spark 6"){
+        console.log("added to spark 6")
+        setSpark6(spark6.concat(songId))
+        console.log(spark6)
+    }
+
+    else if (e.target.id === "spark 7"){
+        console.log("added to spark 7")
+        setSpark7(spark7.concat(songId))
+        console.log(spark7)
+    }
+
+    else if (e.target.id === "spark 8"){
+        console.log("added to spark 8")
+        setSpark8(spark8.concat(songId))
+        console.log(spark8)
+    }
+
+    else if (e.target.id === "spark 9"){
+        console.log("added to spark 9")
+        setSpark9(spark9.concat(songId))
+        console.log(spark9)
+    }
+
+    else if (e.target.id === "spark 10"){
+        console.log("added to spark 10")
+        setSpark10(spark10.concat(songId))
+        console.log(spark10)
+    }
 }
 
+function showSparkHandler() {
+    if(showCustomSpark1 == false) {
+        setShowCustomSpark1((prevShow) => prevShow = true)
+    }
+    else if(showCustomSpark2 == false) {
+        setShowCustomSpark2(true)
+    }
+    else if(showCustomSpark3 == false) {
+        setShowCustomSpark3(true)
+    }
+    else if(showCustomSpark4 == false) {
+        setShowCustomSpark4(true)
+    }
+    else if(showCustomSpark5 == false) {
+        setShowCustomSpark5(true)
+    }
+    else if(showCustomSpark6 == false) {
+        setShowCustomSpark6(true)
+    }
+    else if(showCustomSpark7 == false) {
+        setShowCustomSpark7(true)
+        setShowAddSparkButton(false)
+    }
+}
+
+function editSparkName() {
+    return (<div>hi</div>)
+}
+
+
 function clearSparks() {
-    setSpark1("")
-    setSpark2("")
-    setSpark3("")
+    setSpark1([])
+    setSpark2([])
+    setSpark3([])
+    setSpark4([])
+    setSpark5([])
+    setSpark6([])
+    setSpark7([])
+    setSpark8([])
+    setSpark9([])
+    setSpark10([])
 }
   return (
     <div>
@@ -221,6 +341,15 @@ function clearSparks() {
         <button className="sparkButton" id="spark1" onClick={addSpark1toPlaylist}>Add Spark 1 to playlist</button>
         <button className="sparkButton" id="spark2" onClick={addSpark2toPlaylist}>Add spark 2 to playlist</button>
         <button className="sparkButton" id="spark3" onClick={addSpark3toPlaylist}>Add spark 3 to playlist</button>
+        <button className="sparkButton" id="spark3" onClick={addSpark4toPlaylist}>Add {showCustomSpark1} to playlist</button>
+        <button className="sparkButton" id="spark3" onClick={addSpark5toPlaylist}>Add {showCustomSpark2} to playlist</button>
+        <button className="sparkButton" id="spark3" onClick={addSpark6toPlaylist}>Add {showCustomSpark3} to playlist</button>
+        <button className="sparkButton" id="spark3" onClick={addSpark7toPlaylist}>Add {showCustomSpark4} to playlist</button>
+        <button className="sparkButton" id="spark3" onClick={addSpark8toPlaylist}>Add {showCustomSpark5} to playlist</button>
+        <button className="sparkButton" id="spark3" onClick={addSpark9toPlaylist}>Add {showCustomSpark6} to playlist</button>
+        <button className="sparkButton" id="spark3" onClick={addSpark10toPlaylist}>Add {showCustomSpark7} to playlist</button>
+
+
             
         <form onSubmit={searchArtists} className="search">
                 {token && <input type='text' onChange={e => setSearchKey(e.target.value)}/>}
@@ -230,8 +359,42 @@ function clearSparks() {
                 {token && <input type='text' onChange={e => setSearchKey(e.target.value)}/>}
                 {token &&<button type={"submit"}>search</button>}
             </form>
-            {isModal1Open && <Modal token={token} setIsModal1Open={setIsModal1Open} onButtonClick={getPlaylists} renderPlaylists={renderPlaylists} addSpark={addSpark} clearSparks={clearSparks}/>}
-            {isModal2open && <Sparkmodal token={token} setIsModal2Open={setIsModal2Open} onButtonClick={getPlaylists} renderPlaylists={renderPlaylists} addSpark={addSpark} clearSparks={clearSparks} closeModal2={closeModal2}/>}
+            {isModal1Open && <Modal 
+                token={token}
+                setIsModal1Open={setIsModal1Open}
+                onButtonClick={getPlaylists}
+                renderPlaylists={renderPlaylists}
+                addSpark={addSpark}
+                clearSparks={clearSparks}
+            />}
+
+            {isModal2open && <Sparkmodal
+                token={token}
+                setIsModal2Open={setIsModal2Open}
+                showCustomSpark1={showCustomSpark1}
+                showCustomSpark2={showCustomSpark2}
+                showCustomSpark3={showCustomSpark3}
+                showCustomSpark4={showCustomSpark4}
+                showCustomSpark5={showCustomSpark5}
+                showCustomSpark6={showCustomSpark6}
+                showCustomSpark7={showCustomSpark7}
+                onButtonClick={getPlaylists}
+                renderPlaylists={renderPlaylists}
+                addSpark={addSpark}
+                clearSparks={clearSparks}
+                closeModal2={closeModal2}
+                showSparkHandler={showSparkHandler}
+                editSparkName={editSparkName}
+                setShowCustomSpark1={setShowCustomSpark1}
+                setShowCustomSpark2={setShowCustomSpark2}
+                setShowCustomSpark3={setShowCustomSpark3}
+                setShowCustomSpark4={setShowCustomSpark4}
+                setShowCustomSpark5={setShowCustomSpark5}
+                setShowCustomSpark6={setShowCustomSpark6}
+                setShowCustomSpark7={setShowCustomSpark7}
+
+
+            />}
                        
             {renderArtists()}
             {renderTracks()}
