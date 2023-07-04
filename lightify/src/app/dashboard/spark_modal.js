@@ -38,13 +38,13 @@ export default function Sparkmodal({
 
     return (
         <>
-            <div className="darkBG" onClick={() => setIsModal2Open(false)} />
+            <div className="darkBG" onClick={closeModal2} />
             <div className="centered">
                 <div className="modal2">
                     <div className="modal2Header">
                         <h5 className="heading">Add to Spark</h5>
                     </div>
-                    <button className="closeBtn" onClick={() => setIsModal2Open(false)}>
+                    <button className="closeBtn" onClick={closeModal2}>
                         <RiCloseLine style={{marginBottom: "-3px"}} />
                     </button>
                     <div className="modal2Content">
