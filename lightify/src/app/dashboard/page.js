@@ -1,18 +1,18 @@
 "use client"
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRouter } from "react";
 import axios from "axios"
 import Modal from "./modal";
 import Sparkmodal from "./spark_modal";
 import { addDoc, doc, getDoc, setDoc, collection, getDocs} from 'firebase/firestore'
 import { database } from "../firebaseConfig";
-import { useRouter } from "next/router";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { db } from "../firebaseConfig";
+import SparkListModal from "./sparkListModal";
 
 
 
 export default function Navbar(){
-
+    const database = db
     const auth = getAuth();
     const CLIENT_ID = "e0b423264c9746428e28129fc08fead9"
     const REDIRECT_URI = "http://localhost:3000/dashboard"
@@ -25,6 +25,7 @@ export default function Navbar(){
     const [tracks, setTracks] = useState([])
     const [isModal1Open, setIsModal1Open] = useState(false)
     const [isModal2open, setIsModal2Open] = useState(false)
+    const [isModal4open, setIsModal4Open] = useState(false)
     const [playlists, setPlaylists] = useState([])
     const [songId, setSongId] = useState("")
     const [spark1, setSpark1] = useState([])
@@ -45,10 +46,10 @@ export default function Navbar(){
     const [showCustomSpark5, setShowCustomSpark5] = useState("Spark 8")
     const [showCustomSpark6, setShowCustomSpark6] = useState("Spark 9")
     const [showCustomSpark7, setShowCustomSpark7] = useState("Spark 10")
-    //const collectionRef = collection(database, 'CRUD Data')
     const urlSearchParams = new URLSearchParams(window.location.hash.slice(1));
-    const accessToken = urlSearchParams.get("access_token");
+    let accessToken = urlSearchParams.get("access_token")
     let userToken = sessionStorage.getItem('Token')
+    const [spotifyToken, setSpotifyToken] = useState("")
    
 
 
@@ -63,34 +64,13 @@ export default function Navbar(){
                 setUserId(uid)
                 console.log(uid)
             } else {
-                console.log("ERROR")
+                
             }
         })
-    })
+    }, [])
 
-
-        const fetchData = async () => {
-            let list = []
-            const docRef = doc(db, "users", userId);
-            const docSnap = await getDoc(docRef);
-
-        if (docSnap.exists()) {
-            console.log("Document data:", docSnap.data());
-            list = docSnap.data()
-            setSpark1(list.spark1)
-            console.log(spark1)
-        } 
-        else {
-            // docSnap.data() will be undefined in this case
-            console.log("No such document!");
-        }}
-    
-
-    const addData = () => {
-        console.log(userId)
-
-        addDoc(collectionRef, {
-            uid:userId,
+    const setUserData = async () => {
+        await setDoc(doc(db, "users", userId), {
             spark1:spark1,
             spark2:spark2,
             spark3:spark3,
@@ -100,26 +80,69 @@ export default function Navbar(){
             spark7:spark7,
             spark8:spark8,
             spark9:spark9,
-            spark10:spark10,       
-        })
-        .then(() => {
-            alert('Data sent')
-        })
-        .catch((err) => {
-            console.log(err)
-        })
-    }    
+            spark10:spark10,
+            showCustomSpark1:showCustomSpark1,
+            showCustomSpark2:showCustomSpark2,
+            showCustomSpark3:showCustomSpark3,
+            showCustomSpark4:showCustomSpark4,
+            showCustomSpark5:showCustomSpark5,
+            showCustomSpark6:showCustomSpark6,
+            showCustomSpark7:showCustomSpark7,
+            spotifyToken:spotifyToken
+
+    })
+    }
+
+    const fetchData = async () => {
+
+       
+        let list = []
+        const docRef = doc(database, "users", userId);
+        const docSnap = await getDoc(docRef);
+
+        if (docSnap.exists()) {
+            console.log("Document data:", docSnap.data());
+            list = docSnap.data()
+            setSpark1(list.spark1)
+            setSpark2(list.spark2)
+            setSpark3(list.spark3)
+            setSpark4(list.spark4)
+            setSpark5(list.spark5)
+            setSpark6(list.spark6)
+            setSpark7(list.spark7)
+            setSpark8(list.spark8)
+            setSpark9(list.spark9)
+            setSpark10(list.spark10)
+            setShowCustomSpark1(list.showCustomSpark1)
+            setShowCustomSpark2(list.showCustomSpark2)
+            setShowCustomSpark3(list.showCustomSpark3)
+            setShowCustomSpark4(list.showCustomSpark4)
+            setShowCustomSpark5(list.showCustomSpark5)
+            setShowCustomSpark6(list.showCustomSpark6)
+            setShowCustomSpark7(list.showCustomSpark7)
+            setSpotifyToken(list.spotifyToken)
+            
+
+
+            console.log(spark1)
+        } 
+        else {
+            // docSnap.data() will be undefined in this case
+            console.log("No such document!");
+        }
+    }
+    
+
+
 
     useEffect(() => {
-        
+        setSpotifyToken(accessToken)
+
         console.log(userToken)
         if(token){
             
         }    
-        if(!userToken){
-            window.open("localhost:3000")
-        }
-      }, [])
+      },)
 
     function checkLogin() {
         if (!accessToken) {
@@ -160,12 +183,15 @@ const logout = () => {
 
 
 const searchArtists = async (e) => {
+    if(!accessToken) {
+        alert("LOG IN TO SPOTIFY FIRST")
+    }
 
     setTracks([])
     e.preventDefault()
     const {data} = await axios.get("https://api.spotify.com/v1/search", {
         headers: {
-            Authorization: `Bearer ${accessToken}`
+            Authorization: `Bearer ${spotifyToken}`
         },
         params: {
             q: searchKey,
@@ -177,15 +203,22 @@ const searchArtists = async (e) => {
     setArtists(data.artists.items)
 }
 
-const searchTracks = async (e) => {
 
+function loadKey() {
+    
+}
+
+
+
+const searchTracks = async (e) => {
+    console.log(spotifyToken)
     fetchData()
-    console.log(accessToken)
+    console.log(spotifyToken)
     setArtists([])
     e.preventDefault()
     const {data} = await axios.get("https://api.spotify.com/v1/search", {
         headers: {
-            Authorization: `Bearer ${accessToken}`
+            Authorization: `Bearer ${spotifyToken}`
         },
         params: {
             q: searchKey,
@@ -198,11 +231,11 @@ const searchTracks = async (e) => {
 }
 
 const   getPlaylists = async () => {
-    
+    console.log(spotifyToken)
     setPlaylists([])
     const {data} = await axios.get("https://api.spotify.com/v1/me/playlists", {
         headers: {
-            Authorization: `Bearer ${accessToken}`
+            Authorization: `Bearer ${spotifyToken}`
         },
         params: {
             limit: 20,
@@ -262,7 +295,7 @@ async function postPlaylist(e) {
       const response = await fetch(url, {
         method: 'POST',
         headers: {
-          'Authorization': `Bearer ${accessToken}`,
+          'Authorization': `Bearer ${spotifyToken}`,
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({ uris: tempSpark })
@@ -287,79 +320,90 @@ function openModal(e) {
     setSongId(e.target.id)
 }
 
+function openModal4(e) {
+    fetchData()
+    setIsModal4Open(true)
+
+}
+
 const  closeModal2 = async (e) => {
     setIsModal2Open(false)
     console.log(spark1)
-    await setDoc(doc(db, "users", userId), {
-        spark1:spark1,
-        spark2:spark2,
-        spark3:spark3,
-        spark4:spark4,
-        spark5:spark5,
-        spark6:spark6,
-        spark7:spark7,
-        spark8:spark8,
-        spark9:spark9,
-        spark10:spark10, 
-})
+    setUserData()
+
+    
+    
 }
 
+
+
 function addSpark1toPlaylist(){
+    fetchData()
     setTempSpark(spark1)
+    setIsModal4Open(false)
     setIsModal1Open(true)
     console.log(tempSpark)
 }
 
 function addSpark2toPlaylist(){
     setTempSpark(spark2)
+    setIsModal4Open(false)
     setIsModal1Open(true)
     console.log(tempSpark)
 }
 
 function addSpark3toPlaylist(){
     setTempSpark(spark3)
+    setIsModal4Open(false)
     setIsModal1Open(true)
     console.log(tempSpark)
 }
 
 function addSpark4toPlaylist(){
     setTempSpark(spark4)
+    setIsModal4Open(false)
     setIsModal1Open(true)
     console.log(tempSpark)
 }
 
 function addSpark5toPlaylist(){
     setTempSpark(spark5)
+    setIsModal4Open(false)
     setIsModal1Open(true)
     console.log(tempSpark)
 }
 
 function addSpark6toPlaylist(){
     setTempSpark(spark6)
+    setIsModal4Open(false)
     setIsModal1Open(true)
     console.log(tempSpark)
 }
 
 function addSpark7toPlaylist(){
     setTempSpark(spark7)
+    setIsModal4Open(false)
     setIsModal1Open(true)
     console.log(tempSpark)
 }
 
 function addSpark8toPlaylist(){
     setTempSpark(spark8)
+    setIsModal4Open(false)
     setIsModal1Open(true)
     console.log(tempSpark)
 }
 
 function addSpark9toPlaylist(){
     setTempSpark(spark9)
+    setIsModal4Open(false)
     setIsModal1Open(true)
     console.log(tempSpark)
 }
 
 function addSpark10toPlaylist(){
     setTempSpark(spark10)
+    setIsModal4Open(false)
     setIsModal1Open(true)
     console.log(tempSpark)
 }
@@ -470,22 +514,12 @@ function clearSparks() {
 
   return (
     <div>
-        <button onClick={getData}>handleTest</button>
+        {fetchData}
         <button onClick={logout}>LOG OUT</button>
-        <a onClick={checkLogin}>Login to spotify</a>
+        {spotifyToken ? <a>You've linked your Spotify account</a> : <a onClick={checkLogin}>Login to spotify</a>}
 
         <div className="dashboard">
-        <button className="sparkButton" id="spark1" onClick={addSpark1toPlaylist}>Add Spark 1 to playlist</button>
-        <button className="sparkButton" id="spark2" onClick={addSpark2toPlaylist}>Add spark 2 to playlist</button>
-        <button className="sparkButton" id="spark3" onClick={addSpark3toPlaylist}>Add spark 3 to playlist</button>
-        <button className="sparkButton" id="spark3" onClick={addSpark4toPlaylist}>Add {showCustomSpark1} to playlist</button>
-        <button className="sparkButton" id="spark3" onClick={addSpark5toPlaylist}>Add {showCustomSpark2} to playlist</button>
-        <button className="sparkButton" id="spark3" onClick={addSpark6toPlaylist}>Add {showCustomSpark3} to playlist</button>
-        <button className="sparkButton" id="spark3" onClick={addSpark7toPlaylist}>Add {showCustomSpark4} to playlist</button>
-        <button className="sparkButton" id="spark3" onClick={addSpark8toPlaylist}>Add {showCustomSpark5} to playlist</button>
-        <button className="sparkButton" id="spark3" onClick={addSpark9toPlaylist}>Add {showCustomSpark6} to playlist</button>
-        <button className="sparkButton" id="spark3" onClick={addSpark10toPlaylist}>Add {showCustomSpark7} to playlist</button>
-
+            <div onClick={openModal4}>ADD SPARKS TO PLAYLIST</div>
 
             
         <form onSubmit={searchArtists} className="search">
@@ -497,7 +531,7 @@ function clearSparks() {
                 <button type={"submit"}>search</button>
             </form>
             {isModal1Open && <Modal 
-                accessToken={accessToken}
+                accessToken={spotifyToken}
                 setIsModal1Open={setIsModal1Open}
                 onButtonClick={getPlaylists}
                 renderPlaylists={renderPlaylists}
@@ -506,7 +540,7 @@ function clearSparks() {
             />}
 
             {isModal2open && <Sparkmodal
-                token={accessToken}
+                token={spotifyToken}
                 setIsModal2Open={setIsModal2Open}
                 showCustomSpark1={showCustomSpark1}
                 showCustomSpark2={showCustomSpark2}
@@ -528,9 +562,33 @@ function clearSparks() {
                 setShowCustomSpark5={setShowCustomSpark5}
                 setShowCustomSpark6={setShowCustomSpark6}
                 setShowCustomSpark7={setShowCustomSpark7}
-
-
             />}
+
+            {isModal4open && <SparkListModal
+                token={spotifyToken}
+                isModal1Open={isModal1Open}
+                setIsModal4Open={setIsModal4Open}
+                addSpark1toPlaylist={addSpark1toPlaylist}
+                addSpark2toPlaylist={addSpark2toPlaylist}
+                addSpark3toPlaylist={addSpark3toPlaylist}
+                addSpark4toPlaylist={addSpark4toPlaylist}
+                addSpark5toPlaylist={addSpark5toPlaylist}
+                addSpark6toPlaylist={addSpark6toPlaylist}
+                addSpark7toPlaylist={addSpark7toPlaylist}
+                addSpark8toPlaylist={addSpark8toPlaylist}
+                addSpark9toPlaylist={addSpark9toPlaylist}
+                addSpark10toPlaylist={addSpark10toPlaylist}
+                showCustomSpark1={showCustomSpark1}
+                showCustomSpark2={showCustomSpark2}
+                showCustomSpark3={showCustomSpark3}
+                showCustomSpark4={showCustomSpark4}
+                showCustomSpark5={showCustomSpark5}
+                showCustomSpark6={showCustomSpark6}
+                showCustomSpark7={showCustomSpark7}
+            
+            
+            />}
+
                        
             {renderArtists()}
             {renderTracks()}
