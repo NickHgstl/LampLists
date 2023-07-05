@@ -28,15 +28,26 @@ export default function Navbar(){
     const [isModal4open, setIsModal4Open] = useState(false)
     const [playlists, setPlaylists] = useState([])
     const [songId, setSongId] = useState("")
+    const [songName, setSongName] = useState("")
+    const [spark1SongNames, setSpark1SongNames] = useState([])
     const [spark1, setSpark1] = useState([])
+    const [spark2SongNames, setSpark2SongNames] = useState([])
     const [spark2, setSpark2] = useState([])
+    const [spark3SongNames, setSpark3SongNames] = useState([])
     const [spark3, setSpark3] = useState([])
+    const [spark4SongNames, setSpark4SongNames] = useState([])
     const [spark4, setSpark4] = useState([])
+    const [spark5SongNames, setSpark5SongNames] = useState([])
     const [spark5, setSpark5] = useState([])
+    const [spark6SongNames, setSpark6SongNames] = useState([])
     const [spark6, setSpark6] = useState([])
+    const [spark7SongNames, setSpark7SongNames] = useState([])
     const [spark7, setSpark7] = useState([])
+    const [spark8SongNames, setSpark8SongNames] = useState([])
     const [spark8, setSpark8] = useState([])
+    const [spark9SongNames, setSpark9SongNames] = useState([])
     const [spark9, setSpark9] = useState([])
+    const [spark10SongNames, setSpark10SongNames] = useState([])
     const [spark10, setSpark10] = useState([])
     const [tempSpark, setTempSpark] = useState([])
     const [showCustomSpark1, setShowCustomSpark1] = useState("Spark 4")
@@ -88,7 +99,18 @@ export default function Navbar(){
             showCustomSpark5:showCustomSpark5,
             showCustomSpark6:showCustomSpark6,
             showCustomSpark7:showCustomSpark7,
-            spotifyToken:spotifyToken
+            spotifyToken:spotifyToken,
+            spark1SongNames:spark1SongNames,
+            spark2SongNames:spark2SongNames,
+            spark3SongNames:spark3SongNames,
+            spark4SongNames:spark4SongNames,
+            spark5SongNames:spark5SongNames,
+            spark6SongNames:spark6SongNames,
+            spark7SongNames:spark7SongNames,
+            spark8SongNames:spark8SongNames,
+            spark9SongNames:spark9SongNames,
+            spark10SongNames:spark10SongNames,
+
 
     })
     }
@@ -101,6 +123,7 @@ export default function Navbar(){
         const docSnap = await getDoc(docRef);
 
         if (docSnap.exists()) {
+            console.log(data)
             console.log("Document data:", docSnap.data());
             list = docSnap.data()
             setSpark1(list.spark1)
@@ -120,11 +143,20 @@ export default function Navbar(){
             setShowCustomSpark5(list.showCustomSpark5)
             setShowCustomSpark6(list.showCustomSpark6)
             setShowCustomSpark7(list.showCustomSpark7)
+            setSpark1SongNames(list.spark1SongNames)
+            setSpark2SongNames(list.spark2SongNames)
+            setSpark3SongNames(list.spark3SongNames)
+            setSpark4SongNames(list.spark4SongNames)
+            setSpark5SongNames(list.spark5SongNames)
+            setSpark6SongNames(list.spark6SongNames)
+            setSpark7SongNames(list.spark7SongNames)
+            setSpark8SongNames(list.spark8SongNames)
+            setSpark9SongNames(list.spark9SongNames)
+            setSpark10SongNames(list.spark10SongNames)
             setSpotifyToken(list.spotifyToken)
             
 
 
-            console.log(spark1)
         } 
         else {
             // docSnap.data() will be undefined in this case
@@ -136,13 +168,11 @@ export default function Navbar(){
 
 
     useEffect(() => {
-        setSpotifyToken(accessToken)
 
-        console.log(userToken)
         if(token){
             
         }    
-      },)
+      })
 
     function checkLogin() {
         if (!accessToken) {
@@ -211,7 +241,6 @@ function loadKey() {
 
 
 const searchTracks = async (e) => {
-    console.log(spotifyToken)
     fetchData()
     console.log(spotifyToken)
     setArtists([])
@@ -226,6 +255,7 @@ const searchTracks = async (e) => {
             limit: 5,
         }
     })
+    console.log(data)
     setTracks(data.tracks.items)
     
 }
@@ -255,19 +285,19 @@ const renderArtists = () => {
 }
 
 const renderTracks = () => {
-    
     return tracks.map((track) => (
         <>
              <div
              onClick={openModal}
              key={track.id}
-             id={track.uri}        
+             id={track.uri}
             >
-            {track.name}
+            {track.name} by {track.artists[0].name}
             </div>
         </>       
     ))
 }
+
 
 const renderPlaylists = () => {    
     return playlists.map((playlist) => (
@@ -316,12 +346,16 @@ async function postPlaylist(e) {
 
 function openModal(e) {
     setIsModal2Open(true)
-    getPlaylists()
     setSongId(e.target.id)
+    setSongName(e.target.innerHTML)
+    console.log(spark1SongNames)
 }
 
 function openModal4(e) {
+    console.log(accessToken)
     fetchData()
+    getPlaylists()
+
     setIsModal4Open(true)
 
 }
@@ -414,6 +448,7 @@ const  addSpark = async (e) => {
     if (e.target.id === "spark 1"){
         console.log("added to spark 1")
         setSpark1(spark1.concat(songId))
+        setSpark1SongNames(spark1SongNames.concat(songName))
         console.log(spark1)
 
        
@@ -422,54 +457,63 @@ const  addSpark = async (e) => {
     else if (e.target.id === "spark 2"){
         console.log("added to spark 2")
         setSpark2(spark2.concat(songId))
+        setSpark2SongNames(spark2SongNames.concat(songName))
         console.log(spark2)
     }
 
     else if (e.target.id === "spark 3"){
         console.log("added to spark 3")
         setSpark3(spark3.concat(songId))
+        setSpark3SongNames(spark3SongNames.concat(songName))
         console.log(spark3)
     }
 
     else if (e.target.id === "spark 4"){
         console.log("added to spark 4")
         setSpark4(spark4.concat(songId))
+        setSpark4SongNames(spark4SongNames.concat(songName))
         console.log(spark4)
     }
 
     else if (e.target.id === "spark 5"){
         console.log("added to spark 5")
         setSpark5(spark5.concat(songId))
+        setSpark5SongNames(spark5SongNames.concat(songName))
         console.log(spark5)
     }
 
     else if (e.target.id === "spark 6"){
         console.log("added to spark 6")
         setSpark6(spark6.concat(songId))
+        setSpark6SongNames(spark6SongNames.concat(songName))
         console.log(spark6)
     }
 
     else if (e.target.id === "spark 7"){
         console.log("added to spark 7")
         setSpark7(spark7.concat(songId))
+        setSpark7SongNames(spark7SongNames.concat(songName))
         console.log(spark7)
     }
 
     else if (e.target.id === "spark 8"){
         console.log("added to spark 8")
         setSpark8(spark8.concat(songId))
+        setSpark8SongNames(spark8SongNames.concat(songName))
         console.log(spark8)
     }
 
     else if (e.target.id === "spark 9"){
         console.log("added to spark 9")
         setSpark9(spark9.concat(songId))
+        setSpark9SongNames(spark9SongNames.concat(songName))
         console.log(spark9)
     }
 
     else if (e.target.id === "spark 10"){
         console.log("added to spark 10")
         setSpark10(spark10.concat(songId))
+        setSpark10SongNames(spark10SongNames.concat(songName))
         console.log(spark10)
     }
 }
@@ -510,8 +554,21 @@ function clearSparks() {
     setSpark8([])
     setSpark9([])
     setSpark10([])
-}
+    setSpark1SongNames([])
+    setSpark2SongNames([])
+    setSpark3SongNames([])
+    setSpark4SongNames([])
+    setSpark5SongNames([])
+    setSpark6SongNames([])
+    setSpark7SongNames([])
+    setSpark8SongNames([])
+    setSpark9SongNames([])
+    setSpark10SongNames([])
 
+}
+function test(){
+    console.log(songNames)
+}
   return (
     <div>
         {fetchData}
@@ -562,6 +619,17 @@ function clearSparks() {
                 setShowCustomSpark5={setShowCustomSpark5}
                 setShowCustomSpark6={setShowCustomSpark6}
                 setShowCustomSpark7={setShowCustomSpark7}
+                spark1SongNames={spark1SongNames}
+                spark2SongNames={spark2SongNames}
+                spark3SongNames={spark3SongNames}
+                spark4SongNames={spark4SongNames}
+                spark5SongNames={spark5SongNames}
+                spark6SongNames={spark6SongNames}
+                spark7SongNames={spark7SongNames}
+                spark8SongNames={spark8SongNames}
+                spark9SongNames={spark9SongNames}
+                spark10SongNames={spark10SongNames}
+
             />}
 
             {isModal4open && <SparkListModal
