@@ -15,7 +15,7 @@ export default function Navbar(){
     const database = db
     const auth = getAuth();
     const CLIENT_ID = "e0b423264c9746428e28129fc08fead9"
-    const REDIRECT_URI = "http://localhost:3000/dashboard"
+    const REDIRECT_URI = "https://lightify-8cdd2.web.app/dashboard"
     const AUTH_ENDPOINT = "https://accounts.spotify.com/authorize"
     const RESPONSE_TYPE = "token"
     const [data, setData] = useState({})
@@ -210,7 +210,7 @@ export default function Navbar(){
 
 const logout = () => {
     sessionStorage.setItem("Token", "")
-    window.open("http://localhost:3000/")
+    window.open("https://lightify-8cdd2.web.app/")
     setToken("")
     window.localStorage.removeItem("token")
   }
@@ -338,6 +338,7 @@ async function postPlaylist(e) {
     } catch (error) {
       console.error('Error adding items to the playlist:', error);
     }
+    setIsModal1Open(false)
   }
 
 
@@ -448,6 +449,8 @@ const  addSpark = async (e) => {
         setSpark1(spark1.concat(songId))
         setSpark1SongNames(spark1SongNames.concat(songName))
         console.log(spark1)
+        setIsModal2Open(false)
+        
 
        
     }
@@ -571,7 +574,7 @@ function test(){
     <div>
         {fetchData}
         <button onClick={logout}>LOG OUT</button>
-        {userToken ? <a>You've linked your Spotify account</a> : <a onClick={checkLogin}>Login to spotify</a>}
+        {userToken ? <a>You have linked your Spotify account</a> : <a onClick={checkLogin}>Login to spotify</a>}
 
         <div className="dashboard">
             <div onClick={openModal4}>ADD SPARKS TO PLAYLIST</div>

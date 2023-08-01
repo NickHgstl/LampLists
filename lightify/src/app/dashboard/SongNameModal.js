@@ -22,7 +22,7 @@ export default function SongNameModal({renderSpark1,  onButtonClick, renderPlayl
                     <div className="modal1Content">
                         {renderSongNames.map((songName) => (
                 <>
-                    <div
+                    <div onClick={() => setIsModal4Open(false)}
                     className="songName"
                     >
                     {songName}
