@@ -57,10 +57,8 @@ export default function Navbar(){
     const [showCustomSpark5, setShowCustomSpark5] = useState("Spark 8")
     const [showCustomSpark6, setShowCustomSpark6] = useState("Spark 9")
     const [showCustomSpark7, setShowCustomSpark7] = useState("Spark 10")
-    const urlSearchParams = new URLSearchParams(window.location.hash.slice(1));
-    let accessToken = urlSearchParams.get("access_token")
-    let userToken = sessionStorage.getItem('Token')
-    const [spotifyToken, setSpotifyToken] = useState("")
+    const [userToken, setUserToken] = useState("")
+    
    
 
 
@@ -68,6 +66,14 @@ export default function Navbar(){
 
 
   
+    useEffect(() => {
+        const urlSearchParams = new URLSearchParams(window.location.hash.slice(1));
+        let accessToken = urlSearchParams.get("access_token")
+        console.log(accessToken)
+
+        setUserToken(accessToken)
+    }, [])
+
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, (user) => {
             if(user){
@@ -99,7 +105,6 @@ export default function Navbar(){
             showCustomSpark5:showCustomSpark5,
             showCustomSpark6:showCustomSpark6,
             showCustomSpark7:showCustomSpark7,
-            spotifyToken:spotifyToken,
             spark1SongNames:spark1SongNames,
             spark2SongNames:spark2SongNames,
             spark3SongNames:spark3SongNames,
@@ -153,7 +158,6 @@ export default function Navbar(){
             setSpark8SongNames(list.spark8SongNames)
             setSpark9SongNames(list.spark9SongNames)
             setSpark10SongNames(list.spark10SongNames)
-            setSpotifyToken(list.spotifyToken)
             
 
 
@@ -175,7 +179,7 @@ export default function Navbar(){
       })
 
     function checkLogin() {
-        if (!accessToken) {
+        if (!userToken) {
             
             window.open(`${AUTH_ENDPOINT}?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&response_type=${RESPONSE_TYPE}&scope=%20playlist-modify-private%20playlist-modify-public`)        
         }       
@@ -213,7 +217,7 @@ const logout = () => {
 
 
 const searchArtists = async (e) => {
-    if(!accessToken) {
+    if(!userToken) {
         alert("LOG IN TO SPOTIFY FIRST")
     }
 
@@ -221,7 +225,7 @@ const searchArtists = async (e) => {
     e.preventDefault()
     const {data} = await axios.get("https://api.spotify.com/v1/search", {
         headers: {
-            Authorization: `Bearer ${spotifyToken}`
+            Authorization: `Bearer ${userToken}`
         },
         params: {
             q: searchKey,
@@ -234,20 +238,15 @@ const searchArtists = async (e) => {
 }
 
 
-function loadKey() {
-    
-}
-
-
 
 const searchTracks = async (e) => {
     fetchData()
-    console.log(spotifyToken)
+    console.log(userToken)
     setArtists([])
     e.preventDefault()
     const {data} = await axios.get("https://api.spotify.com/v1/search", {
         headers: {
-            Authorization: `Bearer ${spotifyToken}`
+            Authorization: `Bearer ${userToken}`
         },
         params: {
             q: searchKey,
@@ -261,11 +260,10 @@ const searchTracks = async (e) => {
 }
 
 const   getPlaylists = async () => {
-    console.log(spotifyToken)
     setPlaylists([])
     const {data} = await axios.get("https://api.spotify.com/v1/me/playlists", {
         headers: {
-            Authorization: `Bearer ${spotifyToken}`
+            Authorization: `Bearer ${userToken}`
         },
         params: {
             limit: 20,
@@ -325,7 +323,7 @@ async function postPlaylist(e) {
       const response = await fetch(url, {
         method: 'POST',
         headers: {
-          'Authorization': `Bearer ${spotifyToken}`,
+          'Authorization': `Bearer ${userToken}`,
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({ uris: tempSpark })
@@ -352,7 +350,7 @@ function openModal(e) {
 }
 
 function openModal4(e) {
-    console.log(accessToken)
+    console.log(userToken)
     fetchData()
     getPlaylists()
 
@@ -573,7 +571,7 @@ function test(){
     <div>
         {fetchData}
         <button onClick={logout}>LOG OUT</button>
-        {spotifyToken ? <a>You've linked your Spotify account</a> : <a onClick={checkLogin}>Login to spotify</a>}
+        {userToken ? <a>You've linked your Spotify account</a> : <a onClick={checkLogin}>Login to spotify</a>}
 
         <div className="dashboard">
             <div onClick={openModal4}>ADD SPARKS TO PLAYLIST</div>
@@ -588,7 +586,7 @@ function test(){
                 <button type={"submit"}>search</button>
             </form>
             {isModal1Open && <Modal 
-                accessToken={spotifyToken}
+                userToken={userToken}
                 setIsModal1Open={setIsModal1Open}
                 onButtonClick={getPlaylists}
                 renderPlaylists={renderPlaylists}
@@ -597,7 +595,7 @@ function test(){
             />}
 
             {isModal2open && <Sparkmodal
-                token={spotifyToken}
+                token={userToken}
                 setIsModal2Open={setIsModal2Open}
                 showCustomSpark1={showCustomSpark1}
                 showCustomSpark2={showCustomSpark2}
@@ -633,7 +631,7 @@ function test(){
             />}
 
             {isModal4open && <SparkListModal
-                token={spotifyToken}
+                token={userToken}
                 isModal1Open={isModal1Open}
                 setIsModal4Open={setIsModal4Open}
                 addSpark1toPlaylist={addSpark1toPlaylist}
