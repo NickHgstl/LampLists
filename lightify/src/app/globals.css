@@ -33,6 +33,18 @@ a {
   }
 }
 
+.title_container{
+  display: flex;
+  flex-direction: column;
+  margin-top: 45vh;
+  align-items: center;
+  justify-content: center;
+}
+
+.title{
+  align-self: center;
+  color: rgb(243, 255, 133);
+}
 
 .dashboard {
   display: flex;

@@ -280,7 +280,6 @@ export default function Sparkmodal({
 
                             </div>
                         }
-                        {showAddSparkButton && <button id="addSparkButton" onClick={showSparkHandler}>ADD SPARK</button>}
                         <button className="editSparkButton" onClick={() => setIsModal3Open(true)}>EDIT</button>
                         {isModal3Open && <SparkNameModal
                             setShowCustomSpark1={setShowCustomSpark1}

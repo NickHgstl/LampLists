@@ -15,7 +15,7 @@ export default function Navbar(){
     const database = db
     const auth = getAuth();
     const CLIENT_ID = "e0b423264c9746428e28129fc08fead9"
-    const REDIRECT_URI = "https://lightify-8cdd2.web.app/dashboard"
+    const REDIRECT_URI = "https://lamplists.org/dashboard"
     const AUTH_ENDPOINT = "https://accounts.spotify.com/authorize"
     const RESPONSE_TYPE = "token"
     const [data, setData] = useState({})

@@ -39,8 +39,8 @@ const handleGoogleLogin = (e) =>{
 
   return (
     <div className='Home'>
-      <header>
-        <h1>Lightify</h1>
+      <header className='title_container'>
+        <h1 className='title'>LampLists</h1>
         <button onClick={handleGoogleLogin}>SIGN UP WITH GOOGLE</button>
 
       </header>
