@@ -135,6 +135,18 @@ a {
   
 }
 
+.modal4Content {
+  display: flex;
+  flex-direction: row;
+  color: black;
+  justify-content: center;
+  align-items: center;
+  margin-top: 10vh;
+}
+
+.songDelBtn {  
+}
+
 .modal2Content {
   display: flex;
   flex-direction: column;
@@ -256,3 +268,9 @@ a {
   transform: translateY(-5px);
   box-shadow: 0 10px 20px -10px rgba(24, 90, 219, 0.6);
 }
+
+
+.songNameContainer{
+  margin-right: 10px;
+}
+
