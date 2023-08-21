@@ -33,32 +33,52 @@ export default function Sparkmodal({
     spark7SongNames,
     spark8SongNames,
     spark9SongNames,
-    spark10SongNames
+    spark10SongNames,
+    setSpark1,
+    setSpark2,
+    setSpark3,
+    setSpark4,
+    setSpark5,
+    setSpark6,
+    setSpark7,
+    setSpark8,
+    setSpark9,
+    setSpark10,
+    spark1,
+    spark2,
+    spark3,
+    spark4,
+    spark5,
+    spark6,
+    spark7,
+    spark8,
+    spark9,
+    spark10
+
+
 
 }) {
 
-
     const [renderSongNames, setRenderSongNames] = useState([])
+    const [renderSongIds, setRenderSongIds] = useState([])
+
+    const [currentSpark, setCurrentSpark] = useState([])
 
 
-    const renderSpark1 = () => {
-       
+    function delSong(){
+
     }
+
+
+    
 
     function  SparkSongs(e) {
         if (e.target.id === "spark1Songs"){
             setIsModal4Open(true)
             setRenderSongNames(spark1SongNames)
-            console.log(renderSongNames) 
-             return renderSongNames.map((songName) => (
-                <>
-                    <div
-                    className="songName"
-                    >
-                    {songName}
-                    </div>
-                </>        
-            ))
+            setRenderSongIds(spark1)
+            setCurrentSpark(spark1)
+          
     
            
         }
@@ -66,22 +86,17 @@ export default function Sparkmodal({
         else if (e.target.id === "spark2Songs"){
             setIsModal4Open(true)
             setRenderSongNames(spark2SongNames)
-            console.log(renderSongNames) 
-            return renderSongNames.map((songName) => (
-                <>
-                    <div
-                    className="songName"
-                    >
-                    {songName}
-                    </div>
-                </>        
-            ))
+            setRenderSongIds(spark2)
+            setCurrentSpark(spark2)
+
         }
     
         else if (e.target.id === "spark3Songs"){
             setIsModal4Open(true)
             setRenderSongNames(spark3SongNames)
-            console.log(renderSongNames) 
+            setRenderSongIds(spark3)
+            setCurrentSpark(spark3)
+
             return renderSongNames.map((songName) => (
                 <>
                     <div
@@ -96,7 +111,9 @@ export default function Sparkmodal({
         else if (e.target.id === "spark4Songs"){
             setIsModal4Open(true)
             setRenderSongNames(spark4SongNames)
-            console.log(renderSongNames) 
+            setRenderSongIds(spark4)
+            setCurrentSpark(spark4)
+
             return renderSongNames.map((songName) => (
                 <>
                     <div
@@ -111,7 +128,9 @@ export default function Sparkmodal({
         else if (e.target.id === "spark5Songs"){
             setIsModal4Open(true)
             setRenderSongNames(spark5SongNames)
-            console.log(renderSongNames) 
+            setRenderSongIds(spark5)
+            setCurrentSpark(spark5)
+
             return renderSongNames.map((songName) => (
                 <>
                     <div
@@ -119,6 +138,7 @@ export default function Sparkmodal({
                     >
                     {songName}
                     </div>
+                    
                 </>        
             ))
         }
@@ -126,7 +146,9 @@ export default function Sparkmodal({
         else if (e.target.id === "spark6Songs"){
             setIsModal4Open(true)
             setRenderSongNames(spark6SongNames)
-            console.log(renderSongNames) 
+            setRenderSongIds(spark6)
+            setCurrentSpark(spark6)
+ 
             return renderSongNames.map((songName) => (
                 <>
                     <div
@@ -141,7 +163,9 @@ export default function Sparkmodal({
         else if (e.target.id === "spark7Songs"){
             setIsModal4Open(true)
             setRenderSongNames(spark7SongNames)
-            console.log(renderSongNames) 
+            setRenderSongIds(spark7)
+            setCurrentSpark(spark7)
+
             return renderSongNames.map((songName) => (
                 <>
                     <div
@@ -156,7 +180,8 @@ export default function Sparkmodal({
         else if (e.target.id === "spark8Songs"){
             setIsModal4Open(true)
             setRenderSongNames(spark8SongNames)
-            console.log(renderSongNames) 
+            setRenderSongIds(spark8)
+            setCurrentSpark(spark8)
             return renderSongNames.map((songName) => (
                 <>
                     <div
@@ -171,7 +196,9 @@ export default function Sparkmodal({
         else if (e.target.id === "spark9Songs"){
             setIsModal4Open(true)
             setRenderSongNames(spark9SongNames)
-            console.log(renderSongNames) 
+            setRenderSongIds(spark9)
+            setCurrentSpark(spark9)
+
             return renderSongNames.map((songName) => (
                 <>
                     <div
@@ -186,7 +213,9 @@ export default function Sparkmodal({
         else if (e.target.id === "spark10Songs"){
             setIsModal4Open(true)
             setRenderSongNames(spark10SongNames)
-            console.log(renderSongNames) 
+            setRenderSongIds(spark10)
+            setCurrentSpark(spark10)
+
             return renderSongNames.map((songName) => (
                 <>
                     <div
@@ -194,6 +223,7 @@ export default function Sparkmodal({
                     >
                     {songName}
                     </div>
+                    <div className="songDelBtn" onClick={console.log("fuck")}>x</div>
                 </>        
             ))
         }
@@ -295,9 +325,9 @@ export default function Sparkmodal({
 
                         {isModal4Open && <SongNameModal 
                         setIsModal4Open={setIsModal4Open}
-                        renderSpark1={renderSpark1}
                         SparkSongs={SparkSongs}
                         renderSongNames={renderSongNames}
+                        renderSongIds={renderSongIds}
 
                         />
                         }
