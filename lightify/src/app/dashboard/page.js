@@ -14,14 +14,9 @@ import SparkListModal from "./sparkListModal";
 export default function Navbar(){
     const database = db
     const auth = getAuth();
-<<<<<<< HEAD
     const CLIENT_ID = "e0b423264c9746428e28129fc08fead9"    
     const REDIRECT_URI = "https://lamplists.org/dashboard"
     //const REDIRECT_URI = "http://localhost:3000/dashboard"
-=======
-    const CLIENT_ID = "e0b423264c9746428e28129fc08fead9"
-    const REDIRECT_URI = "http://localhost:3000/dashboard"
->>>>>>> 8b551eeda5dac5ffbfaa819f6547de446afca14a
     const AUTH_ENDPOINT = "https://accounts.spotify.com/authorize"
     const RESPONSE_TYPE = "token"
     const [data, setData] = useState({})
@@ -353,12 +348,6 @@ function openModal(e) {
     setIsModal2Open(true)
     setSongId(e.target.id)
     setSongName(e.target.innerHTML)
-<<<<<<< HEAD
-    console.log(spark1SongNames)
-
-=======
-  //  console.log(spark1SongNames)
->>>>>>> 8b551eeda5dac5ffbfaa819f6547de446afca14a
 }
 
 function openModal4(e) {
