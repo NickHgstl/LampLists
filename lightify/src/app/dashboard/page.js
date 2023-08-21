@@ -14,8 +14,9 @@ import SparkListModal from "./sparkListModal";
 export default function Navbar(){
     const database = db
     const auth = getAuth();
-    const CLIENT_ID = "e0b423264c9746428e28129fc08fead9"
+    const CLIENT_ID = "e0b423264c9746428e28129fc08fead9"    
     const REDIRECT_URI = "https://lamplists.org/dashboard"
+    //const REDIRECT_URI = "http://localhost:3000/dashboard"
     const AUTH_ENDPOINT = "https://accounts.spotify.com/authorize"
     const RESPONSE_TYPE = "token"
     const [data, setData] = useState({})
@@ -210,7 +211,7 @@ export default function Navbar(){
 
 const logout = () => {
     sessionStorage.setItem("Token", "")
-    window.open("https://lightify-8cdd2.web.app/")
+    window.open("https://lamplists.org/")
     setToken("")
     window.localStorage.removeItem("token")
   }
@@ -348,13 +349,13 @@ function openModal(e) {
     setSongId(e.target.id)
     setSongName(e.target.innerHTML)
     console.log(spark1SongNames)
+
 }
 
 function openModal4(e) {
     console.log(userToken)
     fetchData()
     getPlaylists()
-
     setIsModal4Open(true)
 
 }
@@ -460,6 +461,8 @@ const  addSpark = async (e) => {
         setSpark2(spark2.concat(songId))
         setSpark2SongNames(spark2SongNames.concat(songName))
         console.log(spark2)
+        setIsModal2Open(false)
+
     }
 
     else if (e.target.id === "spark 3"){
@@ -467,6 +470,8 @@ const  addSpark = async (e) => {
         setSpark3(spark3.concat(songId))
         setSpark3SongNames(spark3SongNames.concat(songName))
         console.log(spark3)
+        setIsModal2Open(false)
+
     }
 
     else if (e.target.id === "spark 4"){
@@ -474,6 +479,8 @@ const  addSpark = async (e) => {
         setSpark4(spark4.concat(songId))
         setSpark4SongNames(spark4SongNames.concat(songName))
         console.log(spark4)
+        setIsModal2Open(false)
+
     }
 
     else if (e.target.id === "spark 5"){
@@ -481,6 +488,8 @@ const  addSpark = async (e) => {
         setSpark5(spark5.concat(songId))
         setSpark5SongNames(spark5SongNames.concat(songName))
         console.log(spark5)
+        setIsModal2Open(false)
+
     }
 
     else if (e.target.id === "spark 6"){
@@ -488,6 +497,8 @@ const  addSpark = async (e) => {
         setSpark6(spark6.concat(songId))
         setSpark6SongNames(spark6SongNames.concat(songName))
         console.log(spark6)
+        setIsModal2Open(false)
+
     }
 
     else if (e.target.id === "spark 7"){
@@ -495,6 +506,8 @@ const  addSpark = async (e) => {
         setSpark7(spark7.concat(songId))
         setSpark7SongNames(spark7SongNames.concat(songName))
         console.log(spark7)
+        setIsModal2Open(false)
+
     }
 
     else if (e.target.id === "spark 8"){
@@ -502,6 +515,8 @@ const  addSpark = async (e) => {
         setSpark8(spark8.concat(songId))
         setSpark8SongNames(spark8SongNames.concat(songName))
         console.log(spark8)
+        setIsModal2Open(false)
+
     }
 
     else if (e.target.id === "spark 9"){
@@ -509,6 +524,8 @@ const  addSpark = async (e) => {
         setSpark9(spark9.concat(songId))
         setSpark9SongNames(spark9SongNames.concat(songName))
         console.log(spark9)
+        setIsModal2Open(false)
+
     }
 
     else if (e.target.id === "spark 10"){
@@ -516,6 +533,8 @@ const  addSpark = async (e) => {
         setSpark10(spark10.concat(songId))
         setSpark10SongNames(spark10SongNames.concat(songName))
         console.log(spark10)
+        setIsModal2Open(false)
+
     }
 }
 
@@ -580,10 +599,7 @@ function test(){
             <div onClick={openModal4}>ADD SPARKS TO PLAYLIST</div>
 
             
-        <form onSubmit={searchArtists} className="search">
-                <input type='text' onChange={e => setSearchKey(e.target.value)}/>
-                <button type={"submit"}>search</button>
-            </form>
+      
             <form onSubmit={searchTracks}>
                 <input type='text' onChange={e => setSearchKey(e.target.value)}/>
                 <button type={"submit"}>search</button>

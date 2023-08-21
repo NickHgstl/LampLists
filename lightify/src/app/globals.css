@@ -1,4 +1,11 @@
-
+@keyframes fadeInAnimation {
+  0% {
+      opacity: 0;
+  }
+  100% {
+      opacity: 1;
+   }
+}
 
 * {
   box-sizing: border-box;
@@ -13,13 +20,9 @@ body {
 }
 
 body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+ background-color: rgb(243, 255, 133);
+ color: #c4c4c4;
+ font-family: Verdana, Geneva, Tahoma, sans-serif;
 }
 
 a {
@@ -43,25 +46,32 @@ a {
 
 .title{
   align-self: center;
-  color: rgb(243, 255, 133);
+  color: white;
 }
 
 .dashboard {
   display: flex;
   flex-direction: column;
-  border: solid 10px white;
+  border: solid 10px rgb(0, 255, 149);
+  border-radius: 30px;
   align-items: center;
   margin-top: 20%;
 }
 
+
+
 .dashboard button {
-  background-color: white;
-  color: black;
+  background-color: #00ff95;
+  color: white;
   size: 50px;
+  border-radius: 5px;
 }
 
+
+
 .darkBG {
-  background-color: rgba(184, 0, 175, 0.521);
+  background: rgb(243,255,133);
+  background: linear-gradient(90deg, rgba(243,255,133,1) 50%, rgba(0,255,149,1) 86%);
   width: 100vw;
   height: 100vh;
   z-index: 0;
@@ -69,6 +79,10 @@ a {
   left: 50%;
   transform: translate(-50%, -50%);
   position: absolute;
+  animation: fadeInAnimation ease 1s;
+  animation-iteration-count: 1;
+  animation-fill-mode: forwards;
+
 }
 
 .centered {
@@ -90,14 +104,13 @@ a {
 }
 
 .modal2 {
-  width: 600px;
+  width: 50vw;
   height: 500px;
   background: white;
   color: white;
   z-index: 10;
   border-radius: 16px;
   box-shadow: 0 5px 20px 0 rgba(0, 0, 0, 0.04);
-  width: 90vw;
 }
 
 .modalHeader1 {
@@ -142,6 +155,7 @@ a {
   font-size: 14px;
   color: #2c3e50;
   align-items: center;
+  width: 50vw;
   
 }
 
@@ -149,7 +163,7 @@ a {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  width: 80vw;
+  width: 45vw;
   background-color: lightblue;  
 }
 
