@@ -15,8 +15,8 @@ export default function Navbar(){
     const database = db
     const auth = getAuth();
     const CLIENT_ID = "e0b423264c9746428e28129fc08fead9"    
-    const REDIRECT_URI = "https://lamplists.org/dashboard"
-    //const REDIRECT_URI = "http://localhost:3000/dashboard"
+    //const REDIRECT_URI = "https://lamplists.org/dashboard"
+    const REDIRECT_URI = "http://localhost:3000/dashboard"
     const AUTH_ENDPOINT = "https://accounts.spotify.com/authorize"
     const RESPONSE_TYPE = "token"
     const [data, setData] = useState({})
@@ -70,8 +70,6 @@ export default function Navbar(){
     useEffect(() => {
         const urlSearchParams = new URLSearchParams(window.location.hash.slice(1));
         let accessToken = urlSearchParams.get("access_token")
-        console.log(accessToken)
-
         setUserToken(accessToken)
     }, [])
 
@@ -80,7 +78,6 @@ export default function Navbar(){
             if(user){
                 const uid = user.uid
                 setUserId(uid)
-                console.log(uid)
             } else {
                 
             }
@@ -129,8 +126,6 @@ export default function Navbar(){
         const docSnap = await getDoc(docRef);
 
         if (docSnap.exists()) {
-            console.log(data)
-            console.log("Document data:", docSnap.data());
             list = docSnap.data()
             setSpark1(list.spark1)
             setSpark2(list.spark2)
@@ -165,7 +160,6 @@ export default function Navbar(){
         } 
         else {
             // docSnap.data() will be undefined in this case
-            console.log("No such document!");
         }
     }
     
@@ -193,10 +187,8 @@ export default function Navbar(){
         const docSnap = await getDoc(docRef);
         
         if (docSnap.exists()) {
-          console.log("Document data:", docSnap.data());
         } else {
           // docSnap.data() will be undefined in this case
-          console.log("No such document!");
         }
     }
 
@@ -260,7 +252,7 @@ const searchTracks = async (e) => {
     
 }
 
-const   getPlaylists = async () => {
+const getPlaylists = async () => {
     setPlaylists([])
     const {data} = await axios.get("https://api.spotify.com/v1/me/playlists", {
         headers: {
@@ -312,14 +304,59 @@ const renderPlaylists = () => {
     ))
 }
 
+const getPlaylist = async (playlist) => {
+    
+    const {data} = await axios.get(`https://api.spotify.com/v1/playlists/${playlist}`, {
+        headers: {
+            Authorization: `Bearer ${userToken}`
+        },
+        params: {
+            limit: 20,
+            
+        }
+    })
 
+    const logData = data.tracks.items
+    let i = 0;
+    let j = 0;
+    console.log(data.tracks.items)
+    
+    console.log(tempSpark)
+    for(i=0 ; i < data.tracks.items.length; i++) {
+        //console.log(data.tracks.items[i].track.name)
+        
+    }
+
+    for(i=0; i < tempSpark.length ; i++){
+
+        let currentSparkSong = tempSpark[i].replace("spotify:track:", "")
+        console.log(currentSparkSong)
+        for(j = 0 ; j <  data.tracks.items.length; j++){
+            let currentPlaylistSong = logData[j].track.id
+
+            if(currentSparkSong == currentPlaylistSong){
+                console.log("song is already in playlist")
+                tempSpark.splice(i, 1)
+            }
+            
+        } 
+        console.log(tempSpark)
+        console.log("loop complete")
+    }
+}
 
 
 async function postPlaylist(e) {
-    console.log(tempSpark)
     const playlist = (e.target.id)
     const url = `https://api.spotify.com/v1/playlists/${playlist}/tracks`;
 
+    
+    getPlaylist(playlist)
+    console.log(tempSpark)
+
+
+    
+   
     try {
       const response = await fetch(url, {
         method: 'POST',
@@ -332,7 +369,6 @@ async function postPlaylist(e) {
   
       if (response.ok) {
         const data = await response.json();
-        console.log('Items added to the playlist:', data);
       } else {
         console.error('Error adding items to the playlist:', response.status);
       }
@@ -340,6 +376,7 @@ async function postPlaylist(e) {
       console.error('Error adding items to the playlist:', error);
     }
     setIsModal1Open(false)
+
   }
 
 
@@ -351,7 +388,6 @@ function openModal(e) {
 }
 
 function openModal4(e) {
-    console.log(userToken)
     fetchData()
     getPlaylists()
     setIsModal4Open(true)
@@ -360,7 +396,6 @@ function openModal4(e) {
 
 const  closeModal2 = async (e) => {
     setIsModal2Open(false)
-    console.log(spark1)
     setUserData()
 
     
