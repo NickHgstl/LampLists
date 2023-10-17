@@ -15,8 +15,8 @@ export default function Navbar(){
     const database = db
     const auth = getAuth();
     const CLIENT_ID = "e0b423264c9746428e28129fc08fead9"    
-    //const REDIRECT_URI = "https://lamplists.org/dashboard"
-    const REDIRECT_URI = "http://localhost:3000/dashboard"
+    const REDIRECT_URI = "https://lamplists.org/dashboard"
+    //const REDIRECT_URI = "http://localhost:3000/dashboard"
     const AUTH_ENDPOINT = "https://accounts.spotify.com/authorize"
     const RESPONSE_TYPE = "token"
     const [data, setData] = useState({})
@@ -51,6 +51,7 @@ export default function Navbar(){
     const [spark10SongNames, setSpark10SongNames] = useState([])
     const [spark10, setSpark10] = useState([])
     const [tempSpark, setTempSpark] = useState([])
+    const [tempSparkSongNames, setTempSparkSongNames] = useState([])
     const [showCustomSpark1, setShowCustomSpark1] = useState("Spark 4")
     const [showCustomSpark2, setShowCustomSpark2] = useState("Spark 5")
     const [showCustomSpark3, setShowCustomSpark3] = useState("Spark 6")
@@ -175,7 +176,7 @@ export default function Navbar(){
 
     function checkLogin() {
         if (!userToken) {
-            
+            window.close()
             window.open(`${AUTH_ENDPOINT}?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&response_type=${RESPONSE_TYPE}&scope=%20playlist-modify-private%20playlist-modify-public`)        
         }       
       }
@@ -234,7 +235,6 @@ const searchArtists = async (e) => {
 
 const searchTracks = async (e) => {
     fetchData()
-    console.log(userToken)
     setArtists([])
     e.preventDefault()
     const {data} = await axios.get("https://api.spotify.com/v1/search", {
@@ -247,7 +247,6 @@ const searchTracks = async (e) => {
             limit: 5,
         }
     })
-    console.log(data)
     setTracks(data.tracks.items)
     
 }
@@ -304,6 +303,36 @@ const renderPlaylists = () => {
     ))
 }
 
+
+
+async function deletePlaylistItem(playlist, playlistSong) {
+    const url = `https://api.spotify.com/v1/playlists/${playlist}/tracks`;
+   
+   const data = {
+    tracks: [{ uri: playlistSong }]
+  };
+    try {
+      const response = await fetch(url, {
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${userToken}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+      });
+  
+      if (response.ok) {
+        const data = await response.json();
+      } else {
+        console.error('Error adding items to the playlist:', response.status);
+      }
+    } catch (error) {
+      console.error('Error adding items to the playlist:', error);
+    }
+  }
+
+
+
 const getPlaylist = async (playlist) => {
     
     const {data} = await axios.get(`https://api.spotify.com/v1/playlists/${playlist}`, {
@@ -316,43 +345,29 @@ const getPlaylist = async (playlist) => {
         }
     })
 
-    const logData = data.tracks.items
-    let i = 0;
-    let j = 0;
-    console.log(data.tracks.items)
-    
-    console.log(tempSpark)
-    for(i=0 ; i < data.tracks.items.length; i++) {
-        //console.log(data.tracks.items[i].track.name)
-        
+   let i = 0
+   let j = 0
+
+
+   for(i= 0; i < tempSpark.length ; i++){
+    const sparkSong = tempSpark[i] 
+    for(j = 0 ; j < data.tracks.items.length ; j++){
+        const playlistSong = data.tracks.items[j].track.uri
+
+        if(sparkSong == playlistSong){
+            deletePlaylistItem(playlist, playlistSong)
+        }
     }
+  }
 
-    for(i=0; i < tempSpark.length ; i++){
-
-        let currentSparkSong = tempSpark[i].replace("spotify:track:", "")
-        console.log(currentSparkSong)
-        for(j = 0 ; j <  data.tracks.items.length; j++){
-            let currentPlaylistSong = logData[j].track.id
-
-            if(currentSparkSong == currentPlaylistSong){
-                console.log("song is already in playlist")
-                tempSpark.splice(i, 1)
-            }
-            
-        } 
-        console.log(tempSpark)
-        console.log("loop complete")
-    }
 }
 
 
 async function postPlaylist(e) {
     const playlist = (e.target.id)
     const url = `https://api.spotify.com/v1/playlists/${playlist}/tracks`;
-
     
-    getPlaylist(playlist)
-    console.log(tempSpark)
+    await getPlaylist(playlist)
 
 
     
@@ -409,80 +424,68 @@ function addSpark1toPlaylist(){
     setTempSpark(spark1)
     setIsModal4Open(false)
     setIsModal1Open(true)
-    console.log(tempSpark)
 }
 
 function addSpark2toPlaylist(){
     setTempSpark(spark2)
     setIsModal4Open(false)
     setIsModal1Open(true)
-    console.log(tempSpark)
 }
 
 function addSpark3toPlaylist(){
     setTempSpark(spark3)
     setIsModal4Open(false)
     setIsModal1Open(true)
-    console.log(tempSpark)
 }
 
 function addSpark4toPlaylist(){
     setTempSpark(spark4)
     setIsModal4Open(false)
     setIsModal1Open(true)
-    console.log(tempSpark)
 }
 
 function addSpark5toPlaylist(){
     setTempSpark(spark5)
     setIsModal4Open(false)
     setIsModal1Open(true)
-    console.log(tempSpark)
 }
 
 function addSpark6toPlaylist(){
     setTempSpark(spark6)
     setIsModal4Open(false)
     setIsModal1Open(true)
-    console.log(tempSpark)
 }
 
 function addSpark7toPlaylist(){
     setTempSpark(spark7)
     setIsModal4Open(false)
     setIsModal1Open(true)
-    console.log(tempSpark)
 }
 
 function addSpark8toPlaylist(){
     setTempSpark(spark8)
     setIsModal4Open(false)
     setIsModal1Open(true)
-    console.log(tempSpark)
 }
 
 function addSpark9toPlaylist(){
     setTempSpark(spark9)
     setIsModal4Open(false)
     setIsModal1Open(true)
-    console.log(tempSpark)
 }
 
 function addSpark10toPlaylist(){
     setTempSpark(spark10)
     setIsModal4Open(false)
     setIsModal1Open(true)
-    console.log(tempSpark)
 }
 
 
 
 const  addSpark = async (e) => {
     if (e.target.id === "spark 1"){
-        console.log("added to spark 1")
         setSpark1(spark1.concat(songId))
         setSpark1SongNames(spark1SongNames.concat(songName))
-        console.log(spark1)
         setIsModal2Open(false)
         
 
@@ -490,82 +493,64 @@ const  addSpark = async (e) => {
     }
 
     else if (e.target.id === "spark 2"){
-        console.log("added to spark 2")
         setSpark2(spark2.concat(songId))
         setSpark2SongNames(spark2SongNames.concat(songName))
-        console.log(spark2)
         setIsModal2Open(false)
 
     }
 
     else if (e.target.id === "spark 3"){
-        console.log("added to spark 3")
         setSpark3(spark3.concat(songId))
         setSpark3SongNames(spark3SongNames.concat(songName))
-        console.log(spark3)
         setIsModal2Open(false)
 
     }
 
     else if (e.target.id === "spark 4"){
-        console.log("added to spark 4")
         setSpark4(spark4.concat(songId))
         setSpark4SongNames(spark4SongNames.concat(songName))
-        console.log(spark4)
         setIsModal2Open(false)
 
     }
 
     else if (e.target.id === "spark 5"){
-        console.log("added to spark 5")
         setSpark5(spark5.concat(songId))
         setSpark5SongNames(spark5SongNames.concat(songName))
-        console.log(spark5)
         setIsModal2Open(false)
 
     }
 
     else if (e.target.id === "spark 6"){
-        console.log("added to spark 6")
         setSpark6(spark6.concat(songId))
         setSpark6SongNames(spark6SongNames.concat(songName))
-        console.log(spark6)
         setIsModal2Open(false)
 
     }
 
     else if (e.target.id === "spark 7"){
-        console.log("added to spark 7")
         setSpark7(spark7.concat(songId))
         setSpark7SongNames(spark7SongNames.concat(songName))
-        console.log(spark7)
         setIsModal2Open(false)
 
     }
 
     else if (e.target.id === "spark 8"){
-        console.log("added to spark 8")
         setSpark8(spark8.concat(songId))
         setSpark8SongNames(spark8SongNames.concat(songName))
-        console.log(spark8)
         setIsModal2Open(false)
 
     }
 
     else if (e.target.id === "spark 9"){
-        console.log("added to spark 9")
         setSpark9(spark9.concat(songId))
         setSpark9SongNames(spark9SongNames.concat(songName))
-        console.log(spark9)
         setIsModal2Open(false)
 
     }
 
     else if (e.target.id === "spark 10"){
-        console.log("added to spark 10")
         setSpark10(spark10.concat(songId))
         setSpark10SongNames(spark10SongNames.concat(songName))
-        console.log(spark10)
         setIsModal2Open(false)
 
     }
@@ -618,9 +603,6 @@ function clearSparks() {
     setSpark9SongNames([])
     setSpark10SongNames([])
 
-}
-function test(){
-    console.log(songNames)
 }
   return (
     <div>
