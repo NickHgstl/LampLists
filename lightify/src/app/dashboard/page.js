@@ -3,8 +3,7 @@ import { useState, useEffect, useRouter } from "react";
 import axios from "axios"
 import Modal from "./modal";
 import Sparkmodal from "./spark_modal";
-import { addDoc, doc, getDoc, setDoc, collection, getDocs} from 'firebase/firestore'
-import { database } from "../firebaseConfig";
+import {doc, getDoc, setDoc} from 'firebase/firestore'
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { db } from "../firebaseConfig";
 import SparkListModal from "./sparkListModal";
@@ -15,8 +14,8 @@ export default function Navbar(){
     const database = db
     const auth = getAuth();
     const CLIENT_ID = "e0b423264c9746428e28129fc08fead9"    
-    const REDIRECT_URI = "https://lamplists.org/dashboard"
-    //const REDIRECT_URI = "http://localhost:3000/dashboard"
+    //const REDIRECT_URI = "https://lamplists.org/dashboard"
+    const REDIRECT_URI = "http://localhost:3000/dashboard"
     const AUTH_ENDPOINT = "https://accounts.spotify.com/authorize"
     const RESPONSE_TYPE = "token"
     const [data, setData] = useState({})
@@ -51,7 +50,6 @@ export default function Navbar(){
     const [spark10SongNames, setSpark10SongNames] = useState([])
     const [spark10, setSpark10] = useState([])
     const [tempSpark, setTempSpark] = useState([])
-    const [tempSparkSongNames, setTempSparkSongNames] = useState([])
     const [showCustomSpark1, setShowCustomSpark1] = useState("Spark 4")
     const [showCustomSpark2, setShowCustomSpark2] = useState("Spark 5")
     const [showCustomSpark3, setShowCustomSpark3] = useState("Spark 6")
@@ -60,10 +58,6 @@ export default function Navbar(){
     const [showCustomSpark6, setShowCustomSpark6] = useState("Spark 9")
     const [showCustomSpark7, setShowCustomSpark7] = useState("Spark 10")
     const [userToken, setUserToken] = useState("")
-    
-   
-
-
     const [userId, setUserId] = useState(null);
 
 
@@ -120,7 +114,6 @@ export default function Navbar(){
     }
 
     const fetchData = async () => {
-
        
         let list = []
         const docRef = doc(database, "users", userId);
@@ -155,24 +148,12 @@ export default function Navbar(){
             setSpark8SongNames(list.spark8SongNames)
             setSpark9SongNames(list.spark9SongNames)
             setSpark10SongNames(list.spark10SongNames)
-            
-
 
         } 
         else {
-            // docSnap.data() will be undefined in this case
+            console.log("error connecting to firebase database")
         }
     }
-    
-
-
-
-    useEffect(() => {
-
-        if(token){
-            
-        }    
-      })
 
     function checkLogin() {
         if (!userToken) {
@@ -181,7 +162,6 @@ export default function Navbar(){
         }       
       }
     
-
     const getData = async () => {
         
         const docRef = doc(database, "CRUD Data");
@@ -189,18 +169,9 @@ export default function Navbar(){
         
         if (docSnap.exists()) {
         } else {
-          // docSnap.data() will be undefined in this case
+            console.log("error connecting to firebase database")
         }
     }
-
-/*const getData = async () => {
-    await getDocs(collectionRef)
-    .then((response) => {
-        setFireData(response.docs.map((data) => {
-            return {...data.data(), id: data.id}
-        }))
-    })
-}*/
 
 const logout = () => {
     sessionStorage.setItem("Token", "")
@@ -210,7 +181,9 @@ const logout = () => {
   }
 
 
-const searchArtists = async (e) => {
+
+// unused function for searching artists 
+  const searchArtists = async (e) => {
     if(!userToken) {
         alert("LOG IN TO SPOTIFY FIRST")
     }
@@ -230,8 +203,6 @@ const searchArtists = async (e) => {
 
     setArtists(data.artists.items)
 }
-
-
 
 const searchTracks = async (e) => {
     fetchData()
@@ -288,7 +259,6 @@ const renderTracks = () => {
     ))
 }
 
-
 const renderPlaylists = () => {    
     return playlists.map((playlist) => (
         <>
@@ -302,8 +272,6 @@ const renderPlaylists = () => {
         </>        
     ))
 }
-
-
 
 async function deletePlaylistItem(playlist, playlistSong) {
     const url = `https://api.spotify.com/v1/playlists/${playlist}/tracks`;
@@ -331,8 +299,6 @@ async function deletePlaylistItem(playlist, playlistSong) {
     }
   }
 
-
-
 const getPlaylist = async (playlist) => {
     
     const {data} = await axios.get(`https://api.spotify.com/v1/playlists/${playlist}`, {
@@ -340,14 +306,12 @@ const getPlaylist = async (playlist) => {
             Authorization: `Bearer ${userToken}`
         },
         params: {
-            limit: 20,
-            
+            limit: 20,            
         }
     })
 
    let i = 0
    let j = 0
-
 
    for(i= 0; i < tempSpark.length ; i++){
     const sparkSong = tempSpark[i] 
@@ -362,15 +326,11 @@ const getPlaylist = async (playlist) => {
 
 }
 
-
 async function postPlaylist(e) {
     const playlist = (e.target.id)
     const url = `https://api.spotify.com/v1/playlists/${playlist}/tracks`;
     
     await getPlaylist(playlist)
-
-
-    
    
     try {
       const response = await fetch(url, {
@@ -394,8 +354,6 @@ async function postPlaylist(e) {
 
   }
 
-
-
 function openModal(e) {
     setIsModal2Open(true)
     setSongId(e.target.id)
@@ -406,18 +364,12 @@ function openModal4(e) {
     fetchData()
     getPlaylists()
     setIsModal4Open(true)
-
 }
 
 const  closeModal2 = async (e) => {
     setIsModal2Open(false)
-    setUserData()
-
-    
-    
+    setUserData()       
 }
-
-
 
 function addSpark1toPlaylist(){
     fetchData()
@@ -480,79 +432,65 @@ function addSpark10toPlaylist(){
     setIsModal1Open(true)
 }
 
-
-
 const  addSpark = async (e) => {
     if (e.target.id === "spark 1"){
         setSpark1(spark1.concat(songId))
         setSpark1SongNames(spark1SongNames.concat(songName))
-        setIsModal2Open(false)
-        
-
-       
+        setIsModal2Open(false)               
     }
 
     else if (e.target.id === "spark 2"){
         setSpark2(spark2.concat(songId))
         setSpark2SongNames(spark2SongNames.concat(songName))
         setIsModal2Open(false)
-
     }
 
     else if (e.target.id === "spark 3"){
         setSpark3(spark3.concat(songId))
         setSpark3SongNames(spark3SongNames.concat(songName))
         setIsModal2Open(false)
-
     }
 
     else if (e.target.id === "spark 4"){
         setSpark4(spark4.concat(songId))
         setSpark4SongNames(spark4SongNames.concat(songName))
         setIsModal2Open(false)
-
     }
 
     else if (e.target.id === "spark 5"){
         setSpark5(spark5.concat(songId))
         setSpark5SongNames(spark5SongNames.concat(songName))
         setIsModal2Open(false)
-
     }
 
     else if (e.target.id === "spark 6"){
         setSpark6(spark6.concat(songId))
         setSpark6SongNames(spark6SongNames.concat(songName))
         setIsModal2Open(false)
-
     }
 
     else if (e.target.id === "spark 7"){
         setSpark7(spark7.concat(songId))
         setSpark7SongNames(spark7SongNames.concat(songName))
         setIsModal2Open(false)
-
     }
 
     else if (e.target.id === "spark 8"){
         setSpark8(spark8.concat(songId))
         setSpark8SongNames(spark8SongNames.concat(songName))
         setIsModal2Open(false)
-
     }
 
     else if (e.target.id === "spark 9"){
         setSpark9(spark9.concat(songId))
         setSpark9SongNames(spark9SongNames.concat(songName))
         setIsModal2Open(false)
-
     }
 
     else if (e.target.id === "spark 10"){
         setSpark10(spark10.concat(songId))
         setSpark10SongNames(spark10SongNames.concat(songName))
         setIsModal2Open(false)
-
     }
 }
 
@@ -602,19 +540,14 @@ function clearSparks() {
     setSpark8SongNames([])
     setSpark9SongNames([])
     setSpark10SongNames([])
-
 }
   return (
     <div>
         {fetchData}
         <button onClick={logout}>LOG OUT</button>
         {userToken ? <a>You have linked your Spotify account</a> : <a onClick={checkLogin}>Login to spotify</a>}
-
         <div className="dashboard">
-            <div onClick={openModal4}>ADD SPARKS TO PLAYLIST</div>
-
-            
-      
+            <div onClick={openModal4}>ADD SPARKS TO PLAYLIST</div>                  
             <form onSubmit={searchTracks}>
                 <input type='text' onChange={e => setSearchKey(e.target.value)}/>
                 <button type={"submit"}>search</button>
@@ -627,7 +560,6 @@ function clearSparks() {
                 addSpark={addSpark}
                 clearSparks={clearSparks}
             />}
-
             {isModal2open && <Sparkmodal
                 token={userToken}
                 setIsModal2Open={setIsModal2Open}
@@ -671,7 +603,6 @@ function clearSparks() {
                 spark8={spark8}
                 spark9={spark9}
                 spark10={spark10}
-
                 setSpark1={setSpark1}
                 setSpark2={setSpark2}
                 setSpark3={setSpark3}
@@ -684,7 +615,6 @@ function clearSparks() {
                 setSpark10={setSpark10}
 
             />}
-
             {isModal4open && <SparkListModal
                 token={userToken}
                 isModal1Open={isModal1Open}
@@ -705,14 +635,8 @@ function clearSparks() {
                 showCustomSpark4={showCustomSpark4}
                 showCustomSpark5={showCustomSpark5}
                 showCustomSpark6={showCustomSpark6}
-                showCustomSpark7={showCustomSpark7}
-               
-
-            
-            
-            />}
-
-                       
+                showCustomSpark7={showCustomSpark7}                                       
+            />}                       
             {renderArtists()}
             {renderTracks()}
         </div>
